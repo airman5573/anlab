@@ -1,0 +1,48 @@
+
+{
+	"browserSyncOptions": {
+		"proxy": "blueprint.local/",
+		"notify": false,
+		"files": ["./dist/css/*.min.css", "./dist/js/*.min.js", "./**/*.php"]
+	},
+
+    "jsFile" :{
+        "paths":[
+            "./js/app.js",
+            "./js/func.js"
+        ]
+    },
+    "vendorJS":{
+        "paths":[
+            "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+            "./node_modules/gsap/dist/gsap.min.js",
+            "./node_modules/gsap/dist/ScrollTrigger.min.js",
+            "./node_modules/@barba/core/dist/barba.umd.js",
+            "./node_modules/smooth-scrollbar/dist/smooth-scrollbar.js",
+            "./node_modules/p5/lib/p5.min.js"
+
+        ]
+    },
+    "vendorCSS":{
+        "paths":[
+            "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "./node_modules/font-awesome/css/font-awesome.css"
+        ]
+    },
+    "vendorFont":{
+        "paths":[
+            "./node_modules/font-awesome/fonts/"
+        ]
+    },
+
+	"paths": {
+        "images": "./images",
+		"js": "./js",
+		"sass": "./scss",
+        "vendors": "./vendors",
+		"fonts": "./fonts",
+        "dist" : "./dist",
+		"node": "./node_modules"
+	}
+
+}

@@ -1,0 +1,93 @@
+.main-timeline{
+
+	.timeline{
+		position:relative;
+		.text{
+			width:50%;
+			left:50%;
+			position:relative;	
+			cursor:pointer;
+			&:hover{
+				.event{
+
+					&:after{
+						background:#333;
+					}
+				}
+			}
+			.event{
+				position:relative;
+				&:after{
+					//padding-right:30px;
+				    content: "";
+				    width: 16px;
+				    height: 16px;
+				    border-radius: 16px;
+				    background: #000;
+				    position: absolute;
+				    top: 0;
+
+				    transition: all .3s ease 0s;
+				}
+				.event_inner{
+					padding-bottom:24px;
+					position: relative;
+					transition: all .3s ease 0s;	
+					font-size:18px;
+					span.date{
+						
+						display:block;
+						font-size:16px;	
+						
+					}		
+
+					span.money{
+						display:block;
+						font-size:16px;
+
+					}
+
+				}
+			}
+		}		
+		&.item-year{
+			text-align:center;
+			margin-bottom:32px;
+		}
+		&.item-left{
+			.text{
+				left:0;
+				border-right:1px solid #000;
+				
+				.event{
+					&:after{
+						right:-8px;
+					}
+					.event_inner{
+						text-align: right;
+						padding-right:24px;
+					}
+				}
+			}
+		}
+		&.item-right{
+			.text{
+				right:0;
+				border-left:1px solid #000;
+
+				.event{
+					&:after{
+						left:-8px;
+					}
+					.event_inner{
+						padding-left:24px;
+					}
+				}
+			}
+		}
+	}
+	.year{
+		text-align:center;
+		padding-bottom:48px;
+	}
+}

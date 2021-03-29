@@ -1,0 +1,74 @@
+:root{
+    --color-light: #fff;
+    --color-dark-brand : #3a2e1f;
+    --color-brand : rgba(123,95,60);
+    --color-dark : #000;
+    --color-dark-grey : #444;
+    --bg-color: var(--color-light);
+    --text-color:--color-dark;
+    --v-spacing:10vh;
+    --header-height: 80px;
+    --burger-width: 30px;
+    --h-gutter:3.3vw;
+    --easing:cubic-bezier(0.5, 0.7, 0.4, 1);
+}
+
+
+html{
+    font-size:16px;
+}
+
+body{
+    font-size:1.0rem;
+
+    color:var(--text-color);
+}
+@media (min-width: 1400px){
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 1140px;
+    }
+}
+
+
+ul{list-style:none;margin:0;padding-left:0;}
+img{max-width:100%;}
+button:focus {outline:0;}
+
+.dark{
+    background:#333;
+}
+
+.darkgrey{
+    background:#666;
+}
+
+.grey{
+    background:#999;
+}
+
+.lightgrey{
+    background:#ccc;
+}
+
+
+.with-padding {
+    padding: var(--v-spacing) 0;
+  }
+.with-padding-bottom {
+padding-bottom: var(--v-spacing);
+}
+
+.fill-background {
+    z-index:-1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    will-change: background-color;
+    background-color: var(--bg-color);
+    transition: background-color 0.7s linear;
+  }
+  .h100{
+    height:100%;
+}

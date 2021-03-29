@@ -1,0 +1,126 @@
+.page-header{
+    position:relative;
+    display: flex;
+    align-items: center;
+
+    // background:var(--color-dark-brand);
+    color:var(--color-light);
+    overflow:hidden;
+    .bg-media{
+        position:absolute;
+        width:100%;
+        height:100%;
+        overflow:hidden;
+        left:0;top:0;
+
+        img{
+            width:100%;height:100%;
+            object-fit: cover;
+            object-position: 50% 50%;
+        }
+        &:after{
+             position:absolute;
+             content:"";
+             top:0;left:0;bottom:0;right:0;
+             background:rgba(0,0,0,0.25);
+             z-index:1;
+        }
+    }
+
+    .page-header-title{
+        // display: inline-block;
+        position: relative;
+        // background:rgba(0,0,0,0.75);
+        // padding:2rem 2rem;
+        padding:5rem 0;
+        z-index:9;
+        margin-bottom:1rem;
+        text-align: center;
+
+        h2{
+            margin-top:0;
+            margin-bottom:0;
+            padding-bottom:2rem;
+            line-height:1.4;
+            font-weight:400;
+            font-size:2.5rem;
+            letter-spacing:-0.1rem;
+            position: relative;
+
+            &:after{
+                position: absolute;
+                left:50%;
+                bottom:0;
+                content:"";
+                height:2px;
+                width:2.5rem;
+                background: white;
+                transform:translate(-50%,-50%)
+            }
+
+        }
+        p{
+            margin-top:1rem;
+            margin-bottom:0rem;
+        }
+        .btn_wrapper{
+            margin-top:2rem;
+        }
+    }
+
+}
+
+.page-header-nav{
+    // display: none;
+    // background:var(--color-dark-brand);
+    background: #fff;
+    border-bottom:1px solid #ddd;
+    ul{
+        text-align:center;
+        display: flex;
+        li{
+            flex:1 1 0 ;
+            // display:inline-block;
+            padding:0 0rem;
+
+            &.current-menu-item{
+                a{
+                    // background: var(--color-brand);
+                    font-weight:500;
+                    color:var(--color-brand);
+                   
+                    &:after{
+                        width:100%;
+                    }
+                    // border-bottom:2px solid var(--color-brand);
+                }
+            }
+            a{
+                // color:white;
+                color:var(--color-dark);
+                display: block;
+                padding:1rem 2rem;
+                font-size:1.125rem;
+                
+                position: relative;
+                &:after{
+                    position: absolute;
+                    // transition:all 0.3s;
+                    bottom:0;
+                    left:0;
+                    content:"";
+                    width:0%;
+                    height:2px;
+                    background: var(--color-brand);
+                }
+                &:hover{
+                    color:var(--color-brand);
+                    &:after{
+                        width:100%;
+                    }
+
+                }
+            }
+        }
+    }
+}

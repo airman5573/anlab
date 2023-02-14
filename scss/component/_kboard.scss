@@ -1,0 +1,86 @@
+
+body #kboard-ask-one-list {
+    .kboard-list table{
+        td{
+            font-size:1rem;
+            &.kboard-list-uid, &.kboard-list-user, &.kboard-list-date, &.kboard-list-status{
+                width:10%;
+            }
+
+        }
+        thead{
+            tr{
+                td{
+                    border-top:2px solid #000;
+                    padding:1.25rem 0;
+                    background-color: white;
+                    font-weight:400;
+                }
+            }
+        }
+        tbody{
+            tr{
+                td{
+                    padding:1.5rem 0;
+
+                }
+                a{
+                    font-size:1rem;
+                    font-weight:400;
+                }
+            }
+        }
+    }
+    .kboard-document-action{
+        display: none;
+    }
+    .kboard-ask-one-new-notify{
+        background: #000;
+    }
+    .kboard-ask-one-status{
+        padding:0.4rem 1rem;
+        border-radius:1rem;
+        &.status-1{
+            background: #000;
+        }
+
+    }
+
+
+
+
+}
+
+body{
+    a.kboard-ask-one-button-small, input.kboard-ask-one-button-small, button.kboard-ask-one-button-small{
+        color:#000 !important;
+        background: none !important;
+        font-size:1rem;
+        border:1px solid #000 !important;
+        padding:0.25rem 1.25rem;
+    }
+    a.kboard-ask-one-button-gray, input.kboard-ask-one-button-gray, button.kboard-ask-one-button-gray{
+        color:#000 !important;
+        background: none !important;
+        font-size:1rem;
+        border:1px solid #000 !important;
+        padding:0.25rem 1.25rem;
+    }
+    #kboard-ask-one-document .kboard-document-action{
+        display: none;
+    }
+    .kboard-ask-one-poweredby{
+        display: none;
+    }
+    .kboard-search{
+        display: none;
+    }
+    .kboard-document-navi{
+        display: none;
+    }
+    #kboard-ask-one-document .kboard-detail .detail-attr select{
+     font-size:1rem;
+     height:32px;   
+     width:100px;
+    }
+}

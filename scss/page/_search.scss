@@ -1,0 +1,117 @@
+.search-form{
+    position: relative;
+
+    width:450px;
+    margin:2rem auto 0;
+    form{
+        // background-color: rgba(255,255,255,0.5);
+        background-color: rgba(0,0,0,0.15);
+        // border: none;
+        display: block;
+        border:1px solid rgba(255,255,255,0.5);
+        // border-bottom: 3px solid #fff;
+        // border-bottom: 0.3rem solid #fff;
+        text-align: left;
+        input{
+            display: inline-block;
+            width: calc(100% - 90px);
+            padding: 0 0 0 15px;
+            height: 3.2rem;
+            line-height: 3.2rem;
+            background-color: rgba(0, 0, 0, 0);
+            border: none;
+            color: #fff;
+            font-size: 1.125rem;
+            font-weight: 500;
+            &:focus{
+                outline:0;
+            }
+            &::placeholder {
+                // color:rgba(0,0,0,0.75);
+                color:white;
+                font-weight:400;
+            }
+        }
+        button{
+            color:white;
+            position: absolute;
+            right:0.5em;
+            top:0.5rem;
+            font-size:1.5rem;
+            background: none;
+            border:none;
+        }
+    }
+}
+
+section.section-case{
+    padding-top:2.0rem;
+    .search-form{
+        margin-top:1rem;
+        form{
+            background: white;
+            border:1px solid #ccc;
+            input{
+                color:black;
+                background:white;
+                &::placeholder {
+                    // color:rgba(0,0,0,0.75);
+                    color:#999;
+                    font-weight:400;
+                }
+
+            }
+            button{
+                color:black;
+
+            }
+        }
+
+    }
+    .keyword{
+        text-align:center;
+        margin-top: 1rem;
+        &.keyword_big{
+            a{
+                font-size:1.4rem;
+            }
+        }
+        a{
+            display: inline-block;
+            padding: 0.25rem 0.25rem;
+            color:$color-brand;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+body.search{
+    main{
+        padding-top: 2.5rem;
+        padding-bottom:5rem;
+    }
+    section{
+        padding: 2.0rem 0;
+        .section__desc{
+            .col-lg-12:first-child{
+                .loop-list{
+                    border-top:2px solid #000;
+                }
+            }
+
+        }
+    }
+}
+
+@media (max-width: 992px) {
+     .search-form {
+        width:80%;
+        form{
+            input{
+                width:calc(100% - 32px);
+            }
+        }
+    }
+}

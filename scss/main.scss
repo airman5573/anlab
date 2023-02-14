@@ -1,24 +1,32 @@
 /*base*/
 @import "./base/init";  //variables..
-@import "./base/scroll";  //variables..
+// @import "./base/scroll";  //variables..
 @import "./base/cursor";  //variables..
 @import "./base/typography";
 
 
 
-
+@import "./component/buttons";
 @import "./component/loop";
 @import "./component/timeline";
-
-
+@import "./component/form";
+@import "./component/kboard";
+@import "./component/pagination";
+@import "./component/map";
 
 @import "./nav/menu";
-@import "./nav/main-navigation";
+@import "./nav/nav-main";
+@import "./nav/nav-page";
+@import "./nav/nav-side";
+@import "./nav/nav-3rd";
+@import "./nav/nav-tab";
 @import "./nav/hamburger";
+@import "./nav/floating";
 
 /*layout*/
 @import "./layout/page-header";
 @import "./layout/site-header";
+@import "./layout/site-header-mobile";
 @import "./layout/site-footer";
 @import "./layout/page-main";
 @import "./layout/panel";
@@ -26,5 +34,8 @@
 /*page**/
 
 @import "./page/home";
+@import "./page/company";
 @import "./page/page";
-
+@import "./page/single";
+@import "./page/member";
+@import "./page/search";

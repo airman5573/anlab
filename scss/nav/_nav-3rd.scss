@@ -1,0 +1,43 @@
+.nav-sub{
+    // padding:2.0rem 0;
+    // text-align:center;
+    // margin:1rem 0 2rem;
+    // padding : 0 0.5rem;
+    ul{
+        li{
+            display: inline-block;
+
+            position: relative;
+            padding-right:4rem;
+            a{
+                display: block;
+                padding:1rem 0rem;
+                font-size:1.25rem;
+                transition:all 0.3s;
+            }
+            &:after{
+                content: '';
+                position: absolute;
+                right: 2rem;
+                top:50%;
+                transform:translateY(-50%);
+                width: 1px;
+                height: 1.25rem;
+                background-color: #ddd;
+                vertical-align: bottom;
+            }
+            &.current-menu-item{
+                a{
+                    font-weight:500;
+                    color:black;
+                }
+            }
+            &:last-child{
+                &:after{
+                    display: none;
+                }
+            }
+
+        }
+    }
+}

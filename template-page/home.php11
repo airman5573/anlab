@@ -1,0 +1,615 @@
+<?php
+/**
+ * Template Name: Home
+ * Template Post Type: post, page
+ */
+$www = get_stylesheet_directory_uri();
+get_header(); 
+?>
+<div class="hero">
+    <div class="hero__content">
+
+        <h1 class="title typewriter-text ">
+            <?php the_field('hero_title'); ?>
+        </h1>
+        <div class="content">
+            <p class="desc serif">
+                <?php the_field('hero_desc'); ?>
+            </p>
+            <div class="search-form">
+                <form role="search" class="input-txt" action="<?php echo site_url('/'); ?>" method="get" id="searchform">
+                    <input type="text" name="s" placeholder="궁금한 점을 검색해보세요."/>
+                    <button type="submit" id="searchsubmit">
+                        <i class="fa fa-search"></i> 
+                    </button>
+                </form>
+            </div>
+            <?php if( have_rows('hero_keyword') ): ?>
+                <div class="keyword"> 
+                <?php while( have_rows('hero_keyword') ): the_row(); ?>
+                        <a href="<?php the_sub_field('url') ?>">
+                         #<?php the_sub_field('title'); ?> 
+                        </a>
+                <?php endwhile; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php if(get_field('hero_video')): ?>
+        <div class="hero__bg">
+            <video playsinline="playsinline" webkit-playsinline="" autoplay="autoplay" muted="muted" loop="loop"
+                poster="<?php the_field('hero_video_loading') ?>">
+                <source src="<?php the_field('hero_video') ?>" type="video/mp4">
+            </video>
+        </div>
+    <?php else: ?>
+        <div class="hero__bg ">
+            <img src="<?php the_field('hero_image') ?>"> 
+        </div>
+    <?php endif; ?>
+    <a id="btn-godown" class="btn scrollTo" href="#first-section">
+        <img src="<?php echo $www; ?>/images/ic_arrow_bottom.svg">
+    </a>
+</div>
+<main>
+
+
+    
+    <?php 
+        $the_query = new WP_Query( array(
+            'post_type' => 'member',
+            'orderby'=> 'menu_order', 
+            'order' => 'ASC',
+            'posts_per_page' => '-1',
+            'tax_query' => array(
+                array (
+                    'taxonomy' => 'member_category',
+                    'field' => 'slug',
+                    'terms' => 'home',
+                )
+            ),
+        ));                
+    ?>
+
+
+    <section class="home-member" >
+        <div class="container">
+            <div class="row no-gutters fade-item">
+                <div class="col-lg-6">
+                    <div class="section__title">
+                    <span class="line"></span>
+                        <h2>에이앤랩 변호사</h2>
+                        <p>의뢰인의 문제, 저희가 들어드리겠습니다.</p>
+                    </div>
+                    <div class="member-desc-list">
+                        <?php if ($the_query->have_posts() ) : ?> 
+                            <?php while (  $the_query->have_posts() ) :  $the_query->the_post(); ?>
+                            <div class="desc" title="<?php the_title(); ?>">
+                                <div class="profile">
+                                    <a href="<?php the_permalink();?>"><img src="<?php the_field('image_rect'); ?>" alt=""></a>
+                                </div>
+                                <h3 class="title lg mobile-only">
+                                    <a href="<?php the_permalink();?>">
+                                        <?php the_title(); ?> <?php the_field('job'); ?>  
+                                    </a>
+                                </h3>
+                                <h4 class="job"><?php the_field('slogan') ?> </h4>
+                                <div class="slogan">
+
+                                    <h4 class="serif lg">
+                                        <?php the_field('slogan_alt') ?>
+                                    </h4>
+                                </div> 
+                         
+                                <div class="career font-weight-light">
+                                    <?php the_field('career') ?>
+                                </div>
+                         
+                            </div><!--desc-->
+                            <?php endwhile; ?>
+                        <?php else : ?>
+                            no post
+                        <?php endif; ?>
+
+                    </div><!--member-desc-list-->
+                </div>
+                <div class="col-lg-6">
+                    <div class="member-image-list">
+
+                        <?php if ($the_query->have_posts() ) : ?> 
+                            <?php while (  $the_query->have_posts() ) :  $the_query->the_post(); ?>
+
+                                <div class="image">
+                                    <a href="<?php the_permalink();?>">
+                                    <img src="<?php the_field('image_bg') ?>" alt="">
+                                    </a>
+                                </div><!--image-->
+                        
+                            <?php endwhile; ?>
+                        <?php else : ?>
+                            no post
+                        <?php endif; ?>
+                        <?php wp_reset_postdata(); ?>
+                    </div><!--member-image-list-->
+                    
+                </div>
+            </div>
+    </div>
+</section>
+
+
+
+
+        
+
+
+
+
+
+    <section class="bg-light">
+        <div class="container">
+            <div class="row section__title fade-item">
+                <div class="col-lg-12">
+                    <span class="line"></span>
+                    <h2>업무사례</h2> 
+                    <p>에이앤랩의 업무사례를 확인하세요.</p>
+
+                    <!-- <div class="cta">
+                        <a href="<?php echo site_url();?>/case/">
+                            <span class="name">
+                                성공사례 더 보기
+                            </span>
+                        </a>
+                    </div> -->
+                </div>
+            </div>
+
+            <div class="row fade-item desktop-only">
+                <?php 
+                    $the_query = new WP_Query( array(
+                        'post_type' => 'case',
+                        'orderby'=> 'date', 
+                        'order' => 'desc',
+                        'posts_per_page' => '4',
+
+                        'tax_query' => array(
+                            array (
+                                'taxonomy' => 'case_category',
+                                'field' => 'slug',
+                                'terms' => 'featured',
+                            )
+                        ),
+
+
+                    ));                
+                ?>
+                <?php if ($the_query->have_posts() ) : ?> 
+                    <?php while (  $the_query->have_posts() ) :  $the_query->the_post(); ?>
+                        <div class="col-xl-3 col-lg-4">  
+                            <a class="loop-case" href="<?php the_permalink();?>">
+                                <p class="meta">
+                                    <?php the_field('meta_cat') ?>
+                                </p>
+                                <div class="desc">
+                                    <h5 class="title">
+                                       <?php the_title(); ?>
+                                    </h5>
+                                    <div class="summary">
+                                        <p>
+                                            <?php the_field('summary'); ?>
+                                        </p> 
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <span class="name" >
+                                        자세히 보기
+                                    </span>
+                                    
+                                </div>
+                                <?php
+                                $post_relation = get_field('member_relation');
+                                if( $post_relation ): ?>
+                                    <div class="member">
+                                        <h6>담당 변호사</h6>
+                                        <ul>
+                                            <?php foreach( $post_relation as $post ): 
+                                                setup_postdata($post); ?>
+                                                    <li>
+                                                        <img src="<?php the_field('image_rect'); ?>" alt="">
+                                                        <span>
+                                                            <?php the_title(); ?> 변호사
+                                                        </span>
+                                                    </li>
+                                            <?php endforeach; ?>
+                                            <?php wp_reset_postdata(); ?>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
+                            </a>
+                        </div>
+                <?php endwhile; ?>
+                <?php else : ?>
+                    no post
+                <?php endif; ?>
+                <?php wp_reset_postdata(); ?>
+            </div>
+
+
+            <div class="row fade-item mobile-only">
+                <?php 
+                    $the_query = new WP_Query( array(
+                        'post_type' => 'case',
+                        'orderby'=> 'date', 
+                        'order' => 'desc',
+                        'posts_per_page' => '4',
+
+                        'tax_query' => array(
+                            array (
+                                'taxonomy' => 'case_category',
+                                'field' => 'slug',
+                                'terms' => 'featured',
+                            )
+                        ),
+
+
+                    ));                
+                ?>
+                <?php if ($the_query->have_posts() ) : ?> 
+                    <div class="col-12"> 
+                    <div id="carouselCase" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselCase" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselCase" data-slide-to="1"></li>
+                        <li data-target="#carouselCase" data-slide-to="2"></li>
+                        <li data-target="#carouselCase" data-slide-to="3"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                    <?php while (  $the_query->have_posts() ) :  $the_query->the_post(); ?>
+                    <div class="carousel-item">
+                            <a class="loop-case" href="<?php the_permalink();?>">
+                                <p class="meta">
+                                    <?php the_field('meta_cat') ?>
+                                </p>
+                                <div class="desc">
+                                    <h5 class="title">
+                                       <?php the_title(); ?>
+                                    </h5>
+                                    <div class="summary">
+                                        <p>
+                                            <?php the_field('summary'); ?>
+                                        </p> 
+                                    </div>
+                                </div>
+                                <div class="detail">
+                                    <span class="name" >
+                                        자세히 보기
+                                    </span>
+                                    
+                                </div>
+                                <?php
+                                $post_relation = get_field('member_relation');
+                                if( $post_relation ): ?>
+                                    <div class="member">
+                                        <h6>담당 변호사</h6>
+                                        <ul>
+                                            <?php foreach( $post_relation as $post ): 
+                                                setup_postdata($post); ?>
+                                                    <li>
+                                                        <img src="<?php the_field('image_rect'); ?>" alt="">
+                                                        <span>
+                                                            <?php the_title(); ?> 변호사
+                                                        </span>
+                                                    </li>
+                                            <?php endforeach; ?>
+                                            <?php wp_reset_postdata(); ?>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
+                            </a>
+                </div><!--carousel-item-->
+                <?php endwhile; ?>
+                <?php else : ?>
+                    no post
+                <?php endif; ?>
+                <?php wp_reset_postdata(); ?>
+            </div><!--carousel--inner-->
+            <a class="carousel-control-prev" href="#carouselCase" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselCase" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+            </div><!--carousel-->
+            </div><!--col-lg-12-->
+            </div><!--row-->
+    <script>
+    (function ($) {
+        $('#carouselCase .carousel-item:first-child').addClass('active');
+    })(jQuery);
+    </script>
+        
+
+
+            <div class="row fade-item ">
+                <div class="col-lg-12">
+                     <div class="cta text-center ">
+                        <a href="<?php echo site_url();?>/case/"> 
+                            <span class="name">
+                                업무사례 더 보기
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <section class="home-news">
+        <div class="container">
+            <div class="row section__title fade-item">
+                <div class="col-lg-12">
+                    <span class="line"></span>
+                    <h2>뉴스 & 인사이트</h2>
+                    <!--<p>언론에서 주목하는 트러스트앤랩을 확인하세요.</p>-->
+
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row fade-item desktop-only" >
+                <?php 
+                    $the_query = new WP_Query( array(
+                        'post_type' => 'press',
+                        'orderby'=> 'menu_order', 
+                        'order' => 'ASC',
+                        'posts_per_page' => '3',
+
+                        'tax_query' => array(
+                            array (
+                                'taxonomy' => 'display_category',
+                                'field' => 'slug',
+                                'terms' => 'home',
+                            )
+                        ),
+
+                    ));                
+                ?>
+                <?php if ($the_query->have_posts() ) : ?>
+                    <?php while (  $the_query->have_posts() ) :  $the_query->the_post(); ?>
+                    <div class="col-lg-4"> 
+                        <a class="loop loop-thumbnail-effect" href="<?php the_permalink();?>">
+                            <div class="image">
+                                <?php if(get_the_post_thumbnail()): ?>
+                                    <?php echo get_the_post_thumbnail(); ?>
+                                <?php else: ?>
+                                    <img src="http://via.placeholder.com/800x600/ ">
+                                <?php endif; ?>
+                            </div>
+                            <div class="desc">
+                                <h6>
+                                <?php 
+                                            $terms = get_the_terms( $post->ID, 'press_category' );
+                                            if ( !empty( $terms ) ){
+                                                // get the first term
+                                                $term = array_shift( $terms );
+                                                echo $term->name;
+                                            }
+                                        ?>
+                                </h6>
+                                <h4 class="title">
+                                    <?php the_title(); ?>
+                                </h4>
+                                <div class="summary">
+                                    <?php  the_excerpt(); ?>
+                                </div>
+                                <p class="date">
+                                    <?php echo get_the_date('Y.m.d') ?>
+                                </p>
+
+                            </div>
+                        </a>
+                    </div>
+                <?php endwhile; ?>
+                <?php else : ?>
+                    no post
+                <?php endif; ?>
+                <?php wp_reset_postdata(); ?>
+            </div>
+
+
+            <div class="row fade-item mobile-only">
+            <?php 
+                    $the_query = new WP_Query( array(
+                        'post_type' => 'press',
+                        'orderby'=> 'menu_order', 
+                        'order' => 'ASC',
+                        'posts_per_page' => '3',
+
+                        'tax_query' => array(
+                            array (
+                                'taxonomy' => 'display_category',
+                                'field' => 'slug',
+                                'terms' => 'home',
+                            )
+                        ),
+                    ));                
+                ?>
+                <?php if ($the_query->have_posts() ) : ?> 
+                    <div class="col-12"> 
+                    <div id="carouselNews" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselNews" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselNews" data-slide-to="1"></li>
+                        <li data-target="#carouselNews" data-slide-to="2"></li>
+
+                    </ol>
+                    <div class="carousel-inner">
+                    <?php while (  $the_query->have_posts() ) :  $the_query->the_post(); ?>
+                    <div class="carousel-item">
+                        <a class="loop loop-thumbnail-effect" href="<?php the_permalink();?>">
+                            <div class="image">
+                                <?php if(get_the_post_thumbnail()): ?>
+                                    <?php echo get_the_post_thumbnail(); ?>
+                                <?php else: ?>
+                                    <img src="http://via.placeholder.com/800x600/ ">
+                                <?php endif; ?>
+                            </div>
+                            <div class="desc">
+                                <h6>
+                                <?php 
+                                    $terms = get_the_terms( $post->ID, 'press_category' );
+                                    if ( !empty( $terms ) ){
+                                        // get the first term
+                                        $term = array_shift( $terms );
+                                        echo $term->name;
+                                    }
+                                ?>
+                                </h6>
+                                <h4 class="title">
+                                    <?php the_title(); ?>
+                                </h4>
+                                <div class="summary">
+                                    <?php  the_excerpt(); ?>
+                                </div>
+                                <p class="date">
+                                    <?php echo get_the_date('Y.m.d') ?>
+                                </p>
+
+                            </div>
+                        </a>
+                </div><!--carousel-item-->
+                <?php endwhile; ?>
+                <?php else : ?>
+                    no post
+                <?php endif; ?>
+                <?php wp_reset_postdata(); ?>
+            </div><!--carousel--inner-->
+            <a class="carousel-control-prev" href="#carouselNews" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselNews" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+            </div><!--carousel-->
+            </div><!--col-lg-12-->
+            </div><!--row-->
+    <script>
+    (function ($) {
+        $('#carouselNews .carousel-item:first-child').addClass('active');
+    })(jQuery);
+    </script>
+        
+
+
+
+            <div class="row fade-item ">
+                <div class="col-lg-12">
+                     <div class="cta text-center">
+                        <a href="<?php echo site_url();?>/press/"> 
+                            <span class="name">
+                                뉴스 & 인사이트 더 보기
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="office" style="background-image:url('<?php the_field('contact_bg');?>');">
+        <div class="container">
+            <div class="row section__title fade-item">
+                <div class="col-lg-12">
+                    <span class="line" style="background:#fff;"></span>
+                    <h2>찾아오시는 길</h2>
+                </div>
+            </div>
+            <div class="row section__desc fade-item">
+                <div class="col-lg-6">
+                    <div class="info">
+                        <h4 >법무법인 에이앤랩</h4>
+                        <ul>
+                            <li>
+                                <span class="key">주소</span>
+                                <span class="value">서울시 서초구 강남대로 337, 337빌딩 10층, 13층</span>
+                            </li>
+
+                            <li>
+                                <span class="key">전화</span>
+                                <span class="value">02-538-0340</span>
+                            </li>
+                            <li>
+                                <span class="key">팩스</span>
+                                <span class="value">02-538-4876</span>
+                            </li>
+                            <li>
+                                <span class="key">이메일</span>
+                                <span class="value">trust@anlab.co.kr</span>
+                            </li>
+                        </ul>    
+                        <article>
+                            <h4>대중교통안내</h4>
+                            <ul>
+                                <li>
+                                    <span class="trans bg-green">2호선</span>
+                                    <span class="trans bg-red">신분당선</span>
+                                    <span class="value">
+                                        강남역 5번출구 3분거리
+                                    </span>
+                                    
+                                </li>
+                            </ul>
+                        </article>
+
+                    </div>
+                </div>
+                <div class="col-lg-6">
+
+                    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=nskymwpj4k"></script>
+					<div id="map" style="width:100%;height:380px;"></div>
+					<script>
+                        var HOME_PATH = window.HOME_PATH || '.';
+                        var cityhall = new naver.maps.LatLng(37.4930632,127.0294633),
+                            map = new naver.maps.Map('map', {
+                                center: cityhall.destinationPoint(0, 50),
+                                
+                                zoom: 16
+                            }),
+                            marker = new naver.maps.Marker({
+                                map: map,
+                                position: cityhall
+                            });
+
+                        var contentString = [
+                                '<div class="iw_inner">',
+                                '   <h6>법무법인 에이앤랩</h6>',
+                                '   <p>서울시 서초구 강남대로 337 10층, 13층 </p>',
+                                ' <div class="link"><a href="http://naver.me/xuI1R0X8" target="_blank">네이버 지도 보기</a></div>',
+                                '</div>'
+                            ].join('');
+
+                        var infowindow = new naver.maps.InfoWindow({
+                            content: contentString,
+                            maxWidth: 240,
+                        });
+
+                        naver.maps.Event.addListener(marker, "click", function(e) {
+                            if (infowindow.getMap()) {
+                                infowindow.close();
+                            } else {
+                                infowindow.open(map, marker);
+                            }
+                        });
+
+                        infowindow.open(map, marker);
+					</script>	
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<?php get_footer(); ?>

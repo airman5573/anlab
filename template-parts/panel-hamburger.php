@@ -5,11 +5,138 @@ $www = get_stylesheet_directory_uri();
 ?>
 
 <div id="hamburger-fullscreen" class="hamburger-fullscreen content-menu content-animation-slide open">
-    <div class="hamburger-menu button-close active">
-        <div class="hamburger-box">
-            <div class="hamburger-inner"></div>
-        </div> <span class="menu-text">Close</span>
+
+    <div class="site-header light text-light transparent">
+        <div class="header-main header-contents">
+            <div class="container-fluid">
+                <div class="header-left-items header-items">
+                    <div class="site-branding">
+                        <a href="<?php echo site_url(); ?>" class="logo">
+                            <img src="<?php echo $www; ?>/images/logo-dark.svg" class="logo-dark"> 
+                            <img src="<?php echo $www; ?>/images/logo-light.svg" class="logo-light"> 
+                        </a>
+                    </div>
+                </div>
+                <div class="header-center-items header-items has-menu">
+                </div>
+                <div class="header-right-items header-items">
+
+                    <div class="header-hamburger hamburger-menu button-close active" data-target="hamburger-fullscreen">
+                        <div class="hamburger-box">
+                            <div class="hamburger-inner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+    <div class="hamburger-screen-inner">
+        <div class="container">
+            <div class="row p-5">
+                <div class="col">
+                    <div class="hamburger-sub-nav">
+                        <h4>소개</h4>
+                        <nav>
+                            <?php
+                                wp_nav_menu( array(
+                                    'menu' => 'company menu',
+                                    'depth'             => 1,
+                                    'container'      => null,
+                                    'menu_class'     => 'menu ',
+                                ) );
+                            ?>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="hamburger-sub-nav">
+                        <h4>변호사</h4>
+                        <nav>
+                            <?php
+                                wp_nav_menu( array(
+                                    'menu' => 'member menu',
+                                    'depth'             => 1,
+                                    'container'      => null,
+                                    'menu_class'     => 'menu ',
+                                ) );
+                            ?>
+                        </nav>
+                    </div>
+                </div>
+
+
+                <div class="col">
+                    <div class="hamburger-sub-nav">
+                        <h4>이혼소송</h4>
+                        <nav>
+                            <?php
+                                wp_nav_menu( array(
+                                    'menu' => 'divorce menu',
+                                    'depth'             => 1,
+                                    'container'      => null,
+                                    'menu_class'     => 'menu ',
+                                ) );
+                            ?>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="hamburger-sub-nav">
+                        <h4>상속소송</h4>
+                        <nav>
+                            <?php
+                                wp_nav_menu( array(
+                                    'menu' => 'inheritance menu',
+                                    'depth'             => 1,
+                                    'container'      => null,
+                                    'menu_class'     => 'menu ',
+                                ) );
+                            ?>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="hamburger-sub-nav">
+                        <h4>성공사례</h4>
+                        <nav>
+                            <?php
+                                wp_nav_menu( array(
+                                    'menu' => 'case menu',
+                                    'depth'             => 1,
+                                    'container'      => null,
+                                    'menu_class'     => 'menu ',
+                                ) );
+                            ?>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="hamburger-sub-nav">
+                        <h4>상담문의</h4>
+                        <nav>
+                            <?php
+                                wp_nav_menu( array(
+                                    'menu' => 'about menu',
+                                    'depth'             => 1,
+                                    'container'      => null,
+                                    'menu_class'     => 'menu ',
+                                ) );
+                            ?>
+                        </nav>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
     <div class="hamburger-screen-inner">
 
         <div class="hamburger-screen-content ps">
@@ -64,6 +191,6 @@ $www = get_stylesheet_directory_uri();
                 ?>
             </div> -->
         </div>
-        <div class="hamburger-screen-background"></div>
+
     </div>
 </div>

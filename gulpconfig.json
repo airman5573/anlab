@@ -1,15 +1,14 @@
 
 {
 	"browserSyncOptions": {
-		"proxy": "blueprint.local/",
+		"proxy": "projecttrust.local/",
 		"notify": false,
-		"files": ["./dist/css/*.min.css", "./dist/js/*.min.js", "./**/*.php"]
+		"files": ["./css/*.css", "./js/*.js", "./js/**/*.js", "./**/*.php", "./*.php"]
 	},
 
     "jsFile" :{
         "paths":[
-            "./js/app.js",
-            "./js/func.js"
+            "./js/main.js"
         ]
     },
     "vendorJS":{
@@ -18,9 +17,7 @@
             "./node_modules/gsap/dist/gsap.min.js",
             "./node_modules/gsap/dist/ScrollTrigger.min.js",
             "./node_modules/@barba/core/dist/barba.umd.js",
-            "./node_modules/smooth-scrollbar/dist/smooth-scrollbar.js",
-            "./node_modules/p5/lib/p5.min.js"
-
+            "./node_modules/smooth-scrollbar/dist/smooth-scrollbar.js"
         ]
     },
     "vendorCSS":{
@@ -34,7 +31,6 @@
             "./node_modules/font-awesome/fonts/"
         ]
     },
-
 	"paths": {
         "images": "./images",
 		"js": "./js",
@@ -42,7 +38,7 @@
         "vendors": "./vendors",
 		"fonts": "./fonts",
         "dist" : "./dist",
+        "css" : "./css",
 		"node": "./node_modules"
 	}
-
 }

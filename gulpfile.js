@@ -1,20 +1,3 @@
-
-// 1) proxy 변경 : ~~.local/
-// 2) Vendor 추가시 gulpconfig.json 내 경로 추가  gulp vendors 실행 -> /node_module로 부터 추출 -> /dist에 vendor.min.css 생성됨
-// 3) 이미지 잘 안되는데.. gulp imagemin으로 보내기 
-// "./node_modules/bootstrap4/dist/js/bootstrap.bundle.min.js",
-// "./node_modules/gsap/dist/gsap.min.js",
-// "./node_modules/gsap/dist/ScrollTrigger.min.js",
-// "./node_modules/p5/lib/p5.min.js"
-// "./node_modules/aos/dist/aos.js",
-// "./node_modules/swiper/swiper-bundle.min.js"
-
-// "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-// "./node_modules/font-awesome/css/font-awesome.css",
-// "./node_modules/swiper/swiper-bundle.min.css",
-// "./node_modules/aos/dist/aos.css"
-
-
 var gulp = require( 'gulp' );
 var plumber = require( 'gulp-plumber' );
 var sass = require( 'gulp-sass' );
@@ -39,9 +22,6 @@ var vendorFont = cfg.vendorFont;
 var paths = cfg.paths;
 
 
-/**
- SCSS
- **/
 
 gulp.task( 'sass', function() {
 	return gulp
@@ -58,14 +38,14 @@ gulp.task( 'sass', function() {
 		.pipe( sass( { errLogToConsole: true } ) )
 		.pipe( postcss( [ autoprefixer() ] ) )
 		.pipe( sourcemaps.write( undefined, { sourceRoot: null } ) )
-		.pipe( gulp.dest( paths.dist + '/css' ) );
+		.pipe( gulp.dest( paths.css  ) );
 } );
 
 
 gulp.task( 'minifycss', function() {
 	return gulp
 		.src([
-			paths.dist + '/css/main.css',
+			paths.css + '/main.css',
 		])
 		.pipe(
 			sourcemaps.init( {
@@ -87,7 +67,7 @@ gulp.task( 'minifycss', function() {
 		)
 		.pipe( rename( { suffix: '.min' } ) )
 		.pipe( sourcemaps.write( './' ) )
-		.pipe( gulp.dest( paths.dist + '/css/' ) );
+		.pipe( gulp.dest( paths.css ) );
 } );
 
 
@@ -97,115 +77,24 @@ gulp.task( 'styles', function( callback ) {
 
 
 
-
-/**
-JS
-**/
-
-gulp.task( 'scripts', function() {
-	var scripts = jsFile.paths;
-	gulp
-		.src( scripts, { allowEmpty: true } )
-		.pipe( babel( { presets: ['@babel/preset-env'] } ) )
-		.pipe( concat( 'app.min.js' ) )
-		.pipe( uglify() )
-		.pipe( gulp.dest( paths.dist + '/js' ) );
-
-	return gulp
-		.src( scripts, { allowEmpty: true } )
-		.pipe( babel() )
-		.pipe( concat( 'app.js' ) )
-		.pipe( gulp.dest( paths.dist + '/js' ) );
-} );
-
-
-
-/**
-IMAGE
- */
- gulp.task( 'imagemin', () =>
- gulp
-     .src( paths.images + '/**' )
-     .pipe(
-         imagemin(
-             [
-                 imagemin.gifsicle( {
-                     interlaced: true,
-                     optimizationLevel: 3,
-                 } ),
-                 imagemin.mozjpeg( {
-                     quality: 75,
-                     progressive: true,
-                 } ),
-                 imagemin.optipng(),
-                 imagemin.svgo(),
-             ],
-             {
-                 verbose: true,
-             }
-         )
-     )
-     .pipe( gulp.dest( paths.dist + '/images' ) )
-);
-
-
-
-
-
-/**
-Vendor
-**/
-
-
-gulp.task( 'vendor-scripts', function() {
-    var scripts = vendorJS.paths;
-    return gulp
-		.src( scripts, { allowEmpty: true } )
-		.pipe(concat( 'vendors.min.js' ) )
-		.pipe(gulp.dest( paths.dist + '/js' ));
-} );
-
-gulp.task( 'vendor-styles', function() {
-    var styles = vendorCSS.paths;
-    return gulp
-		.src( styles, { allowEmpty: true } )
-		.pipe(concat( 'vendors.min.css' ) )
-		.pipe(gulp.dest( paths.dist + '/css' ));
-} );
-
-
-gulp.task( 'vendor-font', function() {
-    var fonts = vendorFont.paths;
-    return gulp
-		.src( fonts + '/*.**')
-		.pipe(gulp.dest( paths.dist + '/fonts' ));
-} );
-
-gulp.task( 'vendors', gulp.series( 'vendor-scripts', 'vendor-styles', 'vendor-font' ) );
-
-
-/**
-WATCH
- */
-
-
-
-
+/**WATCH*/
 gulp.task( 'watch', function() {
 	gulp.watch(
 		[ paths.sass + '/**/*.scss', paths.sass + '/*.scss' ],
 		gulp.series( 'styles' )
 	);
-	gulp.watch(
-		[
-            paths.js + '/*.js',
-			paths.js + '/**/*.js',
-		],
-		gulp.series( 'scripts' )
-	);
+
+	// JS는 파일 형태를 변경하지 않는다. 
+	// gulp.watch(
+	// 	[
+    //      paths.js + '/*.js',
+	// 		paths.js + '/**/*.js',
+	// 	],
+	// 	gulp.series( 'scripts' )
+	// );
 
 	// Inside the watch task.
-	gulp.watch( paths.images + '/**', gulp.series( 'imagemin-watch' ) );
+	// gulp.watch( paths.images + '/**', gulp.series( 'imagemin-watch' ) );
 } );
 
 
@@ -214,15 +103,94 @@ gulp.task( 'browser-sync', function() {
 	browserSync.init( cfg.browserSyncOptions );
 } );
 
-gulp.task(
-	'imagemin-watch',
-	gulp.series( 'imagemin', function reLoad() {
-        console.log('hey')
-		browserSync.reload();
-	} )
-);
+// gulp.task( 	// 이미지도 별도 변경하지 않는다.
+// 	'imagemin-watch',
+// 	gulp.series( 'imagemin', function reLoad() {
+// 		browserSync.reload();
+// 	} )
+// );
 
 gulp.task( 'watch-bs', gulp.parallel( 'browser-sync', 'watch' ) );
 
 // Starts watcher (default task)
 gulp.task( 'default', gulp.series( 'watch-bs' ) );
+
+
+
+
+
+/*예외 상황에 활용한다*******************************************************/
+/********************************************************/
+
+/*JS*******************************************************/
+
+
+gulp.task( 'scripts', function() {
+	var scripts = jsFile.paths;
+	gulp
+		.src( scripts, { allowEmpty: true } )
+		.pipe( babel( { presets: ['@babel/preset-env'] } ) )
+		.pipe( concat( 'main.min.js' ) )
+		.pipe( uglify() )
+		.pipe( gulp.dest( paths.js + '/dist' ) );
+
+	return gulp
+		.src( scripts, { allowEmpty: true } )
+		.pipe( babel() )
+		.pipe( concat( 'main.js' ) )
+		.pipe( gulp.dest( paths.js + '/dist' ) );
+} );
+
+
+
+/*Vendor*******************************************************/
+
+gulp.task( 'vendor-scripts', function() {
+    var scripts = vendorJS.paths;
+    return gulp
+		.src( scripts, { allowEmpty: true } )
+		.pipe(concat( 'vendors.min.js' ) )
+		.pipe(gulp.dest( paths.vendors+ '/dist/js' ));
+} );
+
+gulp.task( 'vendor-styles', function() {
+    var styles = vendorCSS.paths;
+    return gulp
+		.src( styles, { allowEmpty: true } )
+		.pipe(concat( 'vendors.min.css' ) )
+		.pipe(gulp.dest( paths.vendors + '/dist/css' ));
+} );
+
+
+gulp.task( 'vendors', gulp.series( 'vendor-scripts', 'vendor-styles' ) );
+
+
+
+/*IMAGE*******************************************************/
+
+gulp.task( 'imagemin', () =>
+gulp
+	.src( paths.images + '/**' )
+	.pipe(
+		imagemin(
+			[
+				imagemin.gifsicle( {
+					interlaced: true,
+					optimizationLevel: 3,
+				} ),
+				imagemin.mozjpeg( {
+					quality: 75,
+					progressive: true,
+				} ),
+				imagemin.optipng(),
+				imagemin.svgo(),
+			],
+			{
+				verbose: true,
+			}
+		)
+	)
+	.pipe( gulp.dest( paths.images + '/dist' ) )
+);
+
+

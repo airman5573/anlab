@@ -1,0 +1,204 @@
+<?php
+    $www = get_stylesheet_directory_uri();
+    get_header();
+?>
+
+<script>
+    (function ($) {
+        $('header.site-header').removeClass('text-light');
+        $('header.site-header').addClass('text-dark');
+    })(jQuery);
+</script>
+
+
+
+<main>
+    <section class="detail-member">
+        <div class="container">
+            <div class="row fade-item" style="background-image:url('<?php the_field('image_bg') ?>')">
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="desc">
+                        <div class="inner">
+                            <div class="mobile-only profile">
+                                <img src="<?php the_field('image_bg'); ?>" alt="">
+                            </div>
+
+
+                            <h3 class="title">
+                     
+                                <?php the_title(); ?>  <?php the_field('job'); ?>  
+                          
+                            </h3>
+                            <div class="job">
+                                <h4 >
+                                    <?php the_field('slogan') ?> 
+                                </h4>
+                            </div>
+                            <div class="slogan">
+
+                                <h4 class="lg serif">
+                                    <?php the_field('slogan_alt') ?>
+                                </h4>
+                            </div> 
+                            <div class="info">
+                                <div class="career font-weight-light">
+                                    <?php the_field('career') ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a id="btn-godown" class="btn scrollTo" href="#case">
+                <img src="<?php echo $www; ?>/images/ic_arrow_bottom.svg">
+            </a>
+
+        </div>
+    </section>
+
+    <section class="case" id="case">
+        <div class="container">
+            <div class="row section__title  fade-item">
+                <div class="col-lg-12">
+                    <h3 class="sm">업무사례</h3>
+                </div>
+            </div>
+            <div class="row  fade-item desktop-only">
+                <?php 
+                    $projects = get_field('post_relation');
+                ?>
+                <?php if( $projects ): ?>
+                <?php foreach( $projects as $project ): ?>
+                <div class="col-lg-3">
+                    <a class="loop-case" href="<?php the_permalink($project->ID);?>">
+                        <p class="meta">
+                            <?php the_field('meta_cat', $project->ID) ?>
+                        </p>
+                        <div class="desc">
+                            <h5 class="title">
+                                <?php echo get_the_title( $project->ID ); ?>
+                            </h5>
+                            <div class="summary">
+                                <p>
+                                    <?php the_field('summary', $project->ID); ?>
+                                </p> 
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <span class="name" >
+                                자세히 보기
+                            </span>
+                        </div>
+                        <?php
+                        $post_relation = get_field('member_relation', $project->ID);
+                        if( $post_relation ): ?>
+                            <div class="member">
+                                <h6>담당 변호사</h6>
+                                <ul>
+                                    <?php foreach( $post_relation as $post ): 
+                                        setup_postdata($post); ?>
+                                            <li>
+                                                <img src="<?php the_field('image_rect'); ?>" alt="">
+                                                <span>
+                                                    <?php the_title(); ?> 변호사 
+                                                </span>
+                                            </li>
+                                    <?php endforeach; ?>
+                                    <?php wp_reset_postdata(); ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    </a>
+                </div>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+
+
+
+            <div class="row  fade-item mobile-only">
+                <?php 
+                    $projects = get_field('post_relation');
+                ?>
+                <?php if( $projects ): ?>
+                    <div class="col-12"> 
+                    <div id="carouselCase" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselCase" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselCase" data-slide-to="1"></li>
+                        <li data-target="#carouselCase" data-slide-to="2"></li>
+                        <li data-target="#carouselCase" data-slide-to="3"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                <?php foreach( $projects as $project ): ?>
+                    <div class="carousel-item">
+                    <a class="loop-case" href="<?php the_permalink($project->ID);?>">
+                        <p class="meta">
+                            <?php the_field('meta_cat', $project->ID) ?>
+                        </p>
+                        <div class="desc">
+                            <h5 class="title">
+                                <?php echo get_the_title( $project->ID ); ?>
+                            </h5>
+                            <div class="summary">
+                                <p>
+                                    <?php the_field('summary', $project->ID); ?>
+                                </p> 
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <span class="name" >
+                                자세히 보기
+                            </span>
+                        </div>
+                        <?php
+                        $post_relation = get_field('member_relation', $project->ID);
+                        if( $post_relation ): ?>
+                            <div class="member">
+                                <h6>담당 변호사</h6>
+                                <ul>
+                                    <?php foreach( $post_relation as $post ): 
+                                        setup_postdata($post); ?>
+                                            <li>
+                                                <img src="<?php the_field('image_rect'); ?>" alt="">
+                                                <span>
+                                                    <?php the_title(); ?> 변호사 
+                                                </span>
+                                            </li>
+                                    <?php endforeach; ?>
+                                    <?php wp_reset_postdata(); ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                        </a>
+                </div><!--carousel-item-->
+                <?php endforeach; ?>
+                </div><!--carousel--inner-->
+                <a class="carousel-control-prev" href="#carouselCase" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselCase" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+                </div><!--carousel-->
+                </div><!--col-lg-12-->
+
+                <?php endif; ?>
+            </div>
+
+
+        </div>
+    </section>
+
+
+    <script>
+    (function ($) {
+        $('#carouselCase .carousel-item:first-child').addClass('active');
+    })(jQuery);
+    </script>
+</main>
+
+<?php get_footer(); ?>

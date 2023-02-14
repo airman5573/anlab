@@ -1,0 +1,209 @@
+<?php
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
+$function_includes = array(
+    '/pagination.php',
+
+);
+
+foreach($function_includes as $file){
+    require_once get_template_directory() . '/inc' .$file;
+}
+
+
+register_nav_menus(
+    array(
+        'primary_menu'  => 'Primary Menu',
+        'secondary_menu'    => 'Secondary Menu',
+        'footer_menu'    => 'Footer Menu'
+    )
+);
+
+
+add_action('parse_query', 'pmg_ex_sort_posts');
+
+function pmg_ex_sort_posts($q)
+{
+    if(!$q->is_main_query() || is_admin())
+        return;
+    
+    if(
+        !is_post_type_archive('divorce') &&!is_tax('divorce_category') &&!is_tax('inheritance_category') &&!is_tax('guardian_category')
+    ) return;
+
+    $q->set('orderby', 'menu_order');
+    $q->set('order', 'asc');
+}
+
+add_filter( 'get_the_archive_title', function ($title) {    
+    if ( is_category() ) {    
+            $title = single_cat_title( '', false );    
+        } elseif ( is_tag() ) {    
+            $title = single_tag_title( '', false );    
+        } elseif ( is_author() ) {    
+            $title = '<span class="vcard">' . get_the_author() . '</span>' ;    
+        } elseif ( is_tax() ) { //for custom post types
+            $title = sprintf( __( '%1$s' ), single_term_title( '', false ) );
+        } elseif (is_post_type_archive()) {
+            $title = post_type_archive_title( '', false );
+        }
+    return $title;    
+});
+
+
+add_filter( 'nav_menu_link_attributes', 'wpse156165_menu_add_class', 10, 3 );
+
+function wpse156165_menu_add_class( $atts, $item, $args ) {
+    $class = 'primary-menu-link'; // or something based on $item
+    $atts['class'] = $class;
+    return $atts;
+}
+
+add_theme_support( 'post-thumbnails' );
+add_theme_support( 'title-tag' );  
+
+add_action( 'after_setup_theme', function() {
+    add_theme_support( 'responsive-embeds' );
+} );
+
+
+if( function_exists('acf_add_options_page') ) {
+	
+	acf_add_options_page();
+	
+}
+
+add_filter( 'excerpt_length', function($length) {
+    return 20;
+}, PHP_INT_MAX );
+
+
+function mySearchFilter($articleQuery) {
+    if( isset($_GET['search-type']) && $_GET['search-type']){
+        $type = $_GET['search-type'];
+    }
+    if ($articleQuery->is_search && $type == 'member') {
+        $articleQuery->set('post_type', 'member');
+    };
+    return $articleQuery;
+};
+
+add_filter('pre_get_posts','mySearchFilter');
+
+add_filter('kboard_user_display', 'my_kboard_user_display', 10, 5);
+function my_kboard_user_display($user_display, $user_id, $user_name, $plugins, $boardBuilder){
+	$board = $boardBuilder->board;
+	if($board->id == '1'){ // 실제 게시판 id로 적용해주세요.
+		$userdata = get_userdata($user_id);
+		if(!$user_id || !in_array('administrator', $userdata->roles)){
+			$strlen = mb_strlen($user_name, 'utf-8');
+			
+			if($strlen > 3){
+				$header_showlen = 2;
+				$footer_showlen = $header_showlen+2;
+			}
+			else{
+				$header_showlen = 1;
+				$footer_showlen = $header_showlen+1;
+			}
+			
+			$user_display = mb_substr($user_name, 0, $header_showlen, 'utf-8') . str_repeat('O', $header_showlen) . mb_substr($user_name, $footer_showlen, $strlen, 'utf-8');
+		}
+	}
+
+	return $user_display;
+}
+
+
+/*전체 검색시 모든 필드값에 대해 검색되도록 해주기 위한 함수 시작*/
+add_filter('kboard_list_from', 'case_list_from', 10, 3);
+function case_list_from($from, $board_id, $content_list){
+	global $wpdb;
+	$board_skin = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}kboard_board_setting WHERE uid='{$board_id}'", OBJECT);
+	
+	if($board_skin->uid=='2'){
+		$target=$_GET['target'];
+		$keyword=$_GET['keyword'];
+		if($target == '' && $keyword){
+			$from="`{$wpdb->prefix}kboard_board_content` LEFT JOIN `{$wpdb->prefix}kboard_board_option` ON `{$wpdb->prefix}kboard_board_content`.`uid`=`{$wpdb->prefix}kboard_board_option`.`content_uid`";
+		}
+	}
+	
+	//변호사별 담당 사례가 출력되도록 해주는 함수
+	if($board_skin->uid=='4' && strpos(get_permalink(),'/member/')){
+		$from="`{$wpdb->prefix}kboard_board_content` LEFT JOIN `{$wpdb->prefix}kboard_board_option` ON `{$wpdb->prefix}kboard_board_content`.`uid`=`{$wpdb->prefix}kboard_board_option`.`content_uid`";
+	}
+
+	return $from;
+}
+
+add_filter('kboard_list_where', 'case_list_where', 10, 3);
+function case_list_where($where, $board_id, $content_list){
+	global $wpdb;
+	$board_skin = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}kboard_board_setting WHERE uid='{$board_id}'", OBJECT);
+
+	if($board_skin->uid=='2'){
+		$target=$_GET['target'];
+		$keyword=$_GET['keyword'];
+		
+		//전체 검색시
+		if($target == '' && $keyword){
+			$title="(`{$wpdb->prefix}kboard_board_content`.`title` LIKE '%{$keyword}%')";
+			$major_lawyer="(`{$wpdb->prefix}kboard_board_option`.`option_key`='major_lawyer' AND `{$wpdb->prefix}kboard_board_option`.`option_value` LIKE '%{$keyword}%')";
+			$lawyer="(`{$wpdb->prefix}kboard_board_option`.`option_key`='lawyer' AND `{$wpdb->prefix}kboard_board_option`.`option_value` LIKE '%{$keyword}%')";
+			$category="(`{$wpdb->prefix}kboard_board_option`.`option_key`='category' AND `{$wpdb->prefix}kboard_board_option`.`option_value` LIKE '%{$keyword}%')";
+			$content="(`{$wpdb->prefix}kboard_board_content`.`content` LIKE '%{$keyword}%')";
+
+			$where="`{$wpdb->prefix}kboard_board_content`.`board_id`='{$board_id}' AND ({$title} OR {$major_lawyer} OR {$lawyer} OR {$category} OR {$content}) AND `{$wpdb->prefix}kboard_board_content`.`notice`='' AND (`{$wpdb->prefix}kboard_board_content`.`status` IS NULL OR `{$wpdb->prefix}kboard_board_content`.`status`='' OR `{$wpdb->prefix}kboard_board_content`.`status`='pending_approval')";
+		}
+		
+		//'변호사' 검색시
+		if($target == 'kboard_option_lawyer' && $keyword){
+			$major_lawyer="(`{$wpdb->prefix}kboard_board_option`.`option_key`='major_lawyer' AND `{$wpdb->prefix}kboard_board_option`.`option_value` LIKE '%{$keyword}%')";
+			$lawyer="(`{$wpdb->prefix}kboard_board_option`.`option_key`='lawyer' AND `{$wpdb->prefix}kboard_board_option`.`option_value` LIKE '%{$keyword}%')";
+
+			$where="`{$wpdb->prefix}kboard_board_content`.`board_id`='{$board_id}' AND ({$major_lawyer} OR {$lawyer}) AND `{$wpdb->prefix}kboard_board_content`.`notice`='' AND (`{$wpdb->prefix}kboard_board_content`.`status` IS NULL OR `{$wpdb->prefix}kboard_board_content`.`status`='' OR `{$wpdb->prefix}kboard_board_content`.`status`='pending_approval')";
+		}
+	}
+	
+	//변호사별 담당 사례가 출력되도록 해주는 함수
+	if($board_skin->uid=='4' && strpos(get_permalink(),'/member/')){
+		if(strpos(get_permalink(), '%ec%9c%a0%ec%84%a0%ea%b2%bd') !== false){$name='유선경';}
+		if(strpos(get_permalink(), '%eb%b0%95%ed%98%84%ec%8b%9d') !== false){$name='박현식';}
+		if(strpos(get_permalink(), '%ec%a1%b0%ea%b1%b4%eb%aa%85') !== false){$name='조건명';}
+		if(strpos(get_permalink(), '%ec%8b%a0%ec%83%81%eb%af%bc') !== false){$name='신상민';}
+		if(strpos(get_permalink(), '%ea%b9%80%eb%8f%99%ec%9a%b0') !== false){$name='김동우';}
+		if(strpos(get_permalink(), '%ec%a0%95%ec%9d%80%ec%a7%80') !== false){$name='정은지';}
+		if(strpos(get_permalink(), '%eb%b0%95%ec%84%b1%ec%97%b0') !== false){$name='박성연';}
+		$where="`{$wpdb->prefix}kboard_board_content`.`board_id`='2' AND (`{$wpdb->prefix}kboard_board_option`.`option_key`='major_lawyer' AND `{$wpdb->prefix}kboard_board_option`.`option_value` LIKE '%{$name}%' OR `{$wpdb->prefix}kboard_board_option`.`option_key`='lawyer' AND `{$wpdb->prefix}kboard_board_option`.`option_value` LIKE '%{$name}%') AND `{$wpdb->prefix}kboard_board_content`.`notice`='' AND (`{$wpdb->prefix}kboard_board_content`.`status` IS NULL OR `{$wpdb->prefix}kboard_board_content`.`status`='' OR `{$wpdb->prefix}kboard_board_content`.`status`='pending_approval')";
+		?>
+		<style>
+		.kboard-header, .kboard-pagination, .kboard-control{display:none;}
+		.kboard-list.case-list{margin-top:0 !important;}
+
+		@media screen and (max-width: 770px){
+			#kboard-advisory-list .kboard-list tbody tr{width: 48%; margin-right:4% !important;}
+		}
+		@media screen and (max-width: 600px){
+			#kboard-advisory-list {width:100%;}
+			#kboard-advisory-list .kboard-list table td.kboard-list-title {padding:14px;}
+			
+			#kboard-advisory-list .kboard-list .case-list-title .case_category{font-size:14px;}
+			#kboard-advisory-list .kboard-list .kboard-thumbnail-cut-strings{font-size:14px; height:60px;}
+			#kboard-advisory-list .kboard-list tbody td.kboard-list-title .kboard-list-summary,
+			#kboard-advisory-list .case-list .case-list-txt .case-list-date span {font-size:12px;}
+			#kboard-advisory-list .kboard-list-lawyer span b, #kboard-advisory-latest .kboard-list-lawyer span b{font-size:14px;}
+			
+			#kboard-advisory-list .pic{width:31%;}
+			#kboard-advisory-list .lawyerpic{width:44px; height:44px;}
+		}
+		@media screen and (max-width: 320px){
+			#kboard-advisory-list .lawyerpic{width:34px; height:34px;}
+			#kboard-advisory-list .mobile{font-size:11px !important;}
+		}
+		</style>
+	<?}
+
+	return $where;
+}

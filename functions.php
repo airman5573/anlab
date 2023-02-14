@@ -253,8 +253,6 @@ function header_menu(){
 	
 	<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 	<?php }?>
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-	
 	
 	<!-- mobile 헤더 -->
 	<div class="office_bn mobile"><img src="/img/main_traffic_new/bn_office_mobile.jpg"></div>

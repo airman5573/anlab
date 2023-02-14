@@ -210,7 +210,6 @@ wcs_do(_nasa);
 <script src="<?php echo $www;?>/vendors/gsap/ScrollTrigger.min.js"></script>
 <script src="<?php echo $www;?>/vendors/gsap/ScrollToPlugin.min.js"></script>
 <script src="<?php echo $www;?>/vendors/gsap/SplitText.min.js"></script>
-<script src="<?php echo $www;?>/vendors/slick/slick.js"></script>
 <script src="<?php echo $www;?>/js/main.js?v=072812"></script>
 <script src="<?php echo $www;?>/js/script.js"></script>
 

@@ -20,8 +20,8 @@ $www = get_stylesheet_directory_uri();
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="<?php echo $www;?>/vendors/bootstrap4/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?php echo $www;?>/vendors/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="<?php echo $www;?>/vendors/slick/slick.min.css">
         <link rel="stylesheet" href="<?php echo $www;?>/css/main.min.css?v=0809203">
+        <link rel="stylesheet" href="<?php echo $www ?>/vendors/xeicon@2.3.3/xeicon.min.css">
         <style>
 				
 				.home-member:before{background:#b7b7b7; height:102vh;}

@@ -4,7 +4,6 @@ $www = get_stylesheet_directory_uri();
 ?>    
 <head>
 <!--<link rel="stylesheet" type="text/css" href="http://anlab.co.kr/wp-content/themes/trustlab/style2.css">-->
-<link rel="stylesheet" href="../css/main_traffic.css" />
 </head>
 
 
@@ -213,7 +212,6 @@ wcs_do(_nasa);
 <script src="<?php echo $www;?>/vendors/gsap/SplitText.min.js"></script>
 <script src="<?php echo $www;?>/vendors/slick/slick.js"></script>
 <script src="<?php echo $www;?>/js/main.js?v=072812"></script>
-<script src="<?php echo $www;?>/js/anim.js?v=072812"></script>
 <script src="<?php echo $www;?>/js/script.js"></script>
 
 </html>

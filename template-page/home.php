@@ -27,7 +27,6 @@ $success_case_count = '3618';
 header.php 파일로 옮겨둠 - 22.12.19
 <link rel="stylesheet" href="../css/main_traffic.css" />
 -->
-<link rel="stylesheet" href="../css/swiper-bundle.css" />
 <link rel="stylesheet" href="../css/swiper-bundle.min.css" />
 <script src="../js/swiper-bundle.min.js"></script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
@@ -161,14 +160,13 @@ header.php 파일로 옮겨둠 - 22.12.19
 	$(window).on('scroll',function() {
 		var scrolltop = $(window).scrollTop(); // 현재 스크롤 위치
 
-		$(function (){
-			if(location.href.indexOf('#section') != -1 && scrolltop < 10 && move_true == false){
-				if(scrolltop < 10){
-					setTimeout(goTop(location.href.replace(location.origin + '/#', '')), 1500);
-					move_true = true;
-				}
-			}
-		});
+    if(location.href.indexOf('#section') != -1 && scrolltop < 10 && move_true == false){
+      if(scrolltop < 10){
+        setTimeout(goTop(location.href.replace(location.origin + '/#', '')), 1500);
+        move_true = true;
+      }
+    }
+
 		
 			
 		// pc 화면 하단의 nav 메뉴, section2 영역 이하에 들어설 때 나타나게해주는 함수
@@ -308,8 +306,6 @@ header.php 파일로 옮겨둠 - 22.12.19
 </script>
 
 <!-- 형량예측시스템 팝업 시작-->
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-
 <div class="popup_background">
 	<div class="survey_popup">
 		<div class="survey_header">

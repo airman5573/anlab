@@ -305,10 +305,10 @@ function header_menu(){
 				hr = now.getHours(), //시간
 				min = now.getMinutes(); //분
 
-			<!-- 요일추가 시작 23.02.06 김지영 -->	
+			// 요일추가 시작 23.02.06 김지영
 			const week = ['일', '월', '화', '수', '목', '금', '토'];
 			let day = week[now.getDay()]; //요일
-			<!-- 요일추가 끝 -->
+			// 요일추가 끝
 			
 			switch(html_target){
 				case '.realtime_txt.pc' : var echo_txt = `${month}월 ${date}일(${day})<br>${hr}시 ${min}분`; target[0].innerHTML = echo_txt; break;

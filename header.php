@@ -20,7 +20,6 @@ $www = get_stylesheet_directory_uri();
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="<?php echo $www;?>/vendors/bootstrap4/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?php echo $www;?>/vendors/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
         <link rel="stylesheet" href="<?php echo $www;?>/vendors/slick/slick.min.css">
         <link rel="stylesheet" href="<?php echo $www;?>/css/main.min.css?v=0809203">
         <style>

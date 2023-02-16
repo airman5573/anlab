@@ -1,4 +1,3 @@
-
 <?php
 
 defined( 'ABSPATH' ) || exit;
@@ -21,7 +20,7 @@ $www = get_stylesheet_directory_uri();
         <link rel="stylesheet" href="<?php echo $www;?>/vendors/bootstrap4/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?php echo $www;?>/vendors/fontawesome/css/all.min.css">
         <link rel="stylesheet" href="<?php echo $www;?>/css/main.min.css?v=0809203">
-        <link rel="stylesheet" href="<?php echo $www ?>/vendors/xeicon@2.3.3/xeicon.min.css">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
         <style>
 				
 				.home-member:before{background:#b7b7b7; height:102vh;}
@@ -70,6 +69,8 @@ $www = get_stylesheet_directory_uri();
 	<?php
 	// 수정사항(새로 생성), '헤더 및 퀵 메뉴' 출력해주는 숏코드 / functions.php 파일에 정의.
 	echo do_shortcode('[header_menu]');
+		
+	do_action('wp_body_open');
 	?>
 	
 	<!--

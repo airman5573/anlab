@@ -29,6 +29,7 @@ header.php 파일로 옮겨둠 - 22.12.19
 -->
 <link rel="stylesheet" href="../css/swiper-bundle.min.css" />
 <script src="../js/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 
 <!--제이쿼리 ui css-->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -154,31 +155,19 @@ header.php 파일로 옮겨둠 - 22.12.19
 </div>
 
 <script>
-
-
 	var move_true = false; // 이동되었는지 여부를 가리기위한 변수.
 	
-	function checkVisible( elm, eval ) {
-		eval = eval || "object visible";
-		var viewportHeight = $(window).height(), // Viewport Height
-			scrolltop = $(window).scrollTop(), // Scroll Top
-			y = $(elm).offset().top,
-			elementHeight = $(elm).height();   
-    
-		if (eval == "object visible") return ((y < (viewportHeight + scrolltop)) && (y > (scrolltop - elementHeight)));
-		if (eval == "above") return ((y < (viewportHeight + scrolltop)));
-	}
-
-  $(window).on('scroll',function() {
+	$(window).on('scroll',function() {
 		var scrolltop = $(window).scrollTop(); // 현재 스크롤 위치
 
-    if(location.href.indexOf('#section') != -1 && scrolltop < 10 && move_true == false){
-      if(scrolltop < 10){
-        setTimeout(goTop(location.href.replace(location.origin + '/#', '')), 1500);
-        move_true = true;
-      }
-    }
-
+		$(function (){
+			if(location.href.indexOf('#section') != -1 && scrolltop < 10 && move_true == false){
+				if(scrolltop < 10){
+					setTimeout(goTop(location.href.replace(location.origin + '/#', '')), 1500);
+					move_true = true;
+				}
+			}
+		});
 		
 			
 		// pc 화면 하단의 nav 메뉴, section2 영역 이하에 들어설 때 나타나게해주는 함수
@@ -217,8 +206,22 @@ header.php 파일로 옮겨둠 - 22.12.19
 		}
 		*/
 	});
+	
+	function checkVisible( elm, eval ) {
+		eval = eval || "object visible";
+		var viewportHeight = $(window).height(), // Viewport Height
+			scrolltop = $(window).scrollTop(), // Scroll Top
+			y = $(elm).offset().top,
+			elementHeight = $(elm).height();   
+    
+		if (eval == "object visible") return ((y < (viewportHeight + scrolltop)) && (y > (scrolltop - elementHeight)));
+		if (eval == "above") return ((y < (viewportHeight + scrolltop)));
+	}
 
-  function submit() {
+	
+	jQuery('[name=current_url]').val(window.location.href);
+
+	function submit() {
 		if($('#name').val() == ''){
 			alert('이름을 입력하세요');
 			$('#name')[0].focus();
@@ -289,11 +292,9 @@ header.php 파일로 옮겨둠 - 22.12.19
 			}, (i+1)*50)
 		}
 	}
-
-  document.addEventListener('DOMContentLoaded', () => {
-    jQuery('[name=current_url]').val(window.location.href);
-
-    var type_ani_delay = jQuery('.animate_txt').text().length * 50;
+	
+	jQuery(window).on('load', function(){
+		var type_ani_delay = jQuery('.animate_txt').text().length * 50;
 		
 		setInterval(function() {
 			jQuery('.animate_txt').show();
@@ -302,10 +303,12 @@ header.php 파일로 옮겨둠 - 22.12.19
 			setTimeout(function(){ jQuery('.fade_in').animate( {opacity: '1'}, 1500); }, type_ani_delay);
 			setTimeout(function(){ jQuery('.fade_in').css('opacity', '0') }, type_ani_delay + 1500 + 100);
 		}, type_ani_delay + 1500);
-  });
+	});
 </script>
 
 <!-- 형량예측시스템 팝업 시작-->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+
 <div class="popup_background">
 	<div class="survey_popup">
 		<div class="survey_header">
@@ -488,6 +491,8 @@ header.php 파일로 옮겨둠 - 22.12.19
 		jQuery('.popup_background').fadeOut();
 	}
 	
+	jQuery('[name=survey_current_url]').val(window.location.href);
+	
 	function survey_submit(){
 		if(parseInt(jQuery('.selected_count')[0].innerText) != jQuery('.question_box').length){
 			alert('모든 질문에 응답해주세요');
@@ -543,6 +548,17 @@ header.php 파일로 옮겨둠 - 22.12.19
 			}
 		});
 	}
+
+
+	$(function (){
+		jQuery('.total_count')[0].innerText = jQuery('.question_box').length;
+		
+		if($(window).width() < 770){ // 모바일 기기일 때 팝업창 survey_area 영역의 높이가 화면의 50%가 되도록 해주는 함수
+			jQuery('.popup_background .survey_popup .survey_area').outerHeight((window.innerHeight / 10) * 5)
+		}
+	});
+	
+	var checked_array = []; // 체크된 문항들을 저장시키기 위한 배열.
 	
 	function survey_check(number){
 		for(var i=0;i<jQuery('[name=question_'+number+']').length;i++){
@@ -558,6 +574,10 @@ header.php 파일로 옮겨둠 - 22.12.19
 			}
 		}
 	}
+	
+	$('#question_3, #question_7').keyup(function() {
+		survey_text_check(event.target.id.replace('question_',''));
+	})
 	
 	function survey_text_check(number){
 		var number = parseInt(number);
@@ -580,45 +600,27 @@ header.php 파일로 옮겨둠 - 22.12.19
 			console.log(checked_array)
 		}
 	}
-
-  document.addEventListener('DOMContentLoaded', () => {
-    jQuery('[name=survey_current_url]').val(window.location.href);
-
-    $('#question_3, #question_7').keyup(function() {
-      survey_text_check(event.target.id.replace('question_',''));
-    });
-
-    $(function (){
-      jQuery('.total_count')[0].innerText = jQuery('.question_box').length;
-      
-      if($(window).width() < 770){ // 모바일 기기일 때 팝업창 survey_area 영역의 높이가 화면의 50%가 되도록 해주는 함수
-        jQuery('.popup_background .survey_popup .survey_area').outerHeight((window.innerHeight / 10) * 5)
-      }
-    });
-    
-    var checked_array = []; // 체크된 문항들을 저장시키기 위한 배열.
-    
-    $('#question_8_name, #question_8_tel').keyup(function() {
-      if($('#question_8_name').val() != '' && $('#question_8_tel').val() != '' && checked_array.indexOf(8) == -1){
-        jQuery('.selected_count')[0].innerText = parseInt(jQuery('.selected_count')[0].innerText) + 1;
-        jQuery('.progress_bar_inner')[0].style.width = (100 / jQuery('.question_box').length) * jQuery('.selected_count')[0].innerText + '%';
-        checked_array.push(8);
-        console.log(checked_array)
-      }
-      else if(checked_array.indexOf(8) != -1 && ($('#question_8_name').val() == '' || $('#question_8_tel').val() == '')){
-        jQuery('.selected_count')[0].innerText = parseInt(jQuery('.selected_count')[0].innerText) - 1;
-        jQuery('.progress_bar_inner')[0].style.width = (100 / jQuery('.question_box').length) * jQuery('.selected_count')[0].innerText + '%';
-        for(var i=0;i<checked_array.length;i++){
-          if(checked_array[i] === 8){
-            checked_array.splice(i, 1);
-            console.log('제거함')
-            break;
-          }
-        }
-        console.log(checked_array)
-      }
-    });
-  });
+	
+	$('#question_8_name, #question_8_tel').keyup(function() {
+		if($('#question_8_name').val() != '' && $('#question_8_tel').val() != '' && checked_array.indexOf(8) == -1){
+			jQuery('.selected_count')[0].innerText = parseInt(jQuery('.selected_count')[0].innerText) + 1;
+			jQuery('.progress_bar_inner')[0].style.width = (100 / jQuery('.question_box').length) * jQuery('.selected_count')[0].innerText + '%';
+			checked_array.push(8);
+			console.log(checked_array)
+		}
+		else if(checked_array.indexOf(8) != -1 && ($('#question_8_name').val() == '' || $('#question_8_tel').val() == '')){
+			jQuery('.selected_count')[0].innerText = parseInt(jQuery('.selected_count')[0].innerText) - 1;
+			jQuery('.progress_bar_inner')[0].style.width = (100 / jQuery('.question_box').length) * jQuery('.selected_count')[0].innerText + '%';
+			for(var i=0;i<checked_array.length;i++){
+				if(checked_array[i] === 8){
+					checked_array.splice(i, 1);
+					console.log('제거함')
+					break;
+				}
+			}
+			console.log(checked_array)
+		}
+	})
 </script>
 <!-- 형량예측시스템 팝업 끝-->
 
@@ -670,7 +672,54 @@ $count_number3 = 10.7;
 		return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	}
 
-  function checkVisible( elm, eval ) {
+	var count_number1 = <?php echo $count_number1?>;//$('.count_number.one')[0].innerHTML;
+	var count_number2 = <?php echo $count_number2?>;//$('.count_number.two')[0].innerHTML;
+	var count_number3 = <?php echo $count_number3?>;//$('.count_number.three')[0].innerHTML;
+	
+	var isVisible = false;
+
+	$(window).on('scroll',function() {
+		if ( ( checkVisible($('.dashboard.pc')) || checkVisible($('.dashboard.mobile')) )&&!isVisible) {
+			$({ val : 0 }).animate({ val : count_number1 }, {
+				duration: 2500,
+				step: function() {
+					var num = comma(Math.floor(this.val));
+					$(".count_number.one").text(num);
+				},
+				complete: function() {
+					var num = comma(Math.floor(this.val));
+					$(".count_number.one").text(num);
+				}
+			});
+	
+			$({ val : 0 }).animate({ val : count_number2 }, {
+				duration: 2500,
+				step: function() {
+					var num = comma(Math.floor(this.val));
+					$(".count_number.two").text(num);
+				},
+				complete: function() {
+					var num = comma(Math.floor(this.val));
+					$(".count_number.two").text(num);
+				}
+			});
+	
+			$({ val : 0 }).animate({ val : count_number3 }, {
+				duration: 2500,
+				step: function() {
+					var num = comma(Math.floor(this.val));
+					$(".count_number.three").text(num);
+				},
+				complete: function() {
+					var num = comma(Math.floor(this.val));
+					$(".count_number.three").text(num);
+				}
+			});
+			isVisible=true;
+		}
+	});
+	
+	function checkVisible( elm, eval ) {
 		eval = eval || "object visible";
 		var viewportHeight = $(window).height(), // Viewport Height
 			scrolltop = $(window).scrollTop(), // Scroll Top
@@ -680,56 +729,6 @@ $count_number3 = 10.7;
 		if (eval == "object visible") return ((y < (viewportHeight + scrolltop)) && (y > (scrolltop - elementHeight)));
 		if (eval == "above") return ((y < (viewportHeight + scrolltop)));
 	}
-
-  document.addEventListener('DOMContentLoaded', () => {
-    var count_number1 = <?php echo $count_number1?>;//$('.count_number.one')[0].innerHTML;
-    var count_number2 = <?php echo $count_number2?>;//$('.count_number.two')[0].innerHTML;
-    var count_number3 = <?php echo $count_number3?>;//$('.count_number.three')[0].innerHTML;
-    
-    var isVisible = false;
-
-    $(window).on('scroll',function() {
-      if ( ( checkVisible($('.dashboard.pc')) || checkVisible($('.dashboard.mobile')) )&&!isVisible) {
-        $({ val : 0 }).animate({ val : count_number1 }, {
-          duration: 2500,
-          step: function() {
-            var num = comma(Math.floor(this.val));
-            $(".count_number.one").text(num);
-          },
-          complete: function() {
-            var num = comma(Math.floor(this.val));
-            $(".count_number.one").text(num);
-          }
-        });
-    
-        $({ val : 0 }).animate({ val : count_number2 }, {
-          duration: 2500,
-          step: function() {
-            var num = comma(Math.floor(this.val));
-            $(".count_number.two").text(num);
-          },
-          complete: function() {
-            var num = comma(Math.floor(this.val));
-            $(".count_number.two").text(num);
-          }
-        });
-    
-        $({ val : 0 }).animate({ val : count_number3 }, {
-          duration: 2500,
-          step: function() {
-            var num = comma(Math.floor(this.val));
-            $(".count_number.three").text(num);
-          },
-          complete: function() {
-            var num = comma(Math.floor(this.val));
-            $(".count_number.three").text(num);
-          }
-        });
-        isVisible=true;
-      }
-    });
-  });
-
 </script>
 
 
@@ -1001,8 +1000,106 @@ $count_number3 = 10.7;
 			jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').removeClass('on');
 			jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area .' + lawyer + '_slogan').addClass('on');
 		}
+		
+		// pc ver 변호사 소개 이미지 영역의 현재 활성화되고있는 index 값을 담기 위한 변수.
+		var x = 0;
+		
 
-    function mobile_lawyer_slide_setting(){
+		var certificate_swiper = new Swiper('#certificate.swiper-container',  {
+			slidesPerView: 8,
+			spaceBetween: 10,
+			centeredSlides: true,
+			speed: 21000,
+			observer: true,
+			observeParents: true,
+			preloadImages: true,
+			loop: false,
+			autoplay: {
+				delay: 0,
+			},
+		});
+		
+		
+		// mobile용
+		var lawyer_slide_swiper = new Swiper('#lawyer_slide.swiper-container',  {
+			slidesPerView: 2,
+			spaceBetween: 10,
+			navigation: {
+				nextEl: '#lawyer_slide.swiper-button-next',
+				prevEl: '#lawyer_slide.swiper-button-prev',
+			},
+			centeredSlides: true,
+			observer: true,
+			observeParents: true,
+			preloadImages: true,
+			loop: false,
+			autoplay: false,/*{
+				delay: 1000,
+			},*/
+		}).on('slideChange', function() {
+			var current_slide_index = lawyer_slide_swiper.realIndex,
+				lawyer = '';
+
+			switch(current_slide_index){
+				<?php for($i=0; $i<count($lawyer_arr); $i++){?>
+					case <?php echo $i?> : lawyer = '<?php echo $lawyer_arr[$i]?>'; break;
+				<?php }?>
+			}
+
+			var target = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img[src*='+lawyer+']'),
+				hover_src = target.attr('src').replace('blur', 'hover');
+
+		
+			for(var i=0; i<jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').length; i++){
+				var blur_src = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src').replace('hover', 'blur');
+				jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src', blur_src);
+			}
+
+			target.attr('src', hover_src).css('width', '');
+
+
+			jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').removeClass('on');
+			jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).addClass(' on');
+			//jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
+			//jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).fadeIn();
+			
+			jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').removeClass('on');
+			jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').eq(current_slide_index).addClass(' on');
+		});
+		
+		
+		jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro] .career [class^=col_]').on('click', function(){
+			if(jQuery(window).outerWidth() < 1025){
+				var target = jQuery(event.target);
+
+				if(target.hasClass('title')){
+					if(target.children('[class^=xi-angle-]').hasClass('xi-angle-down')){
+						var new_class = target.children('[class^=xi-angle-]').attr('class').replace('down', 'up');
+					}else{
+						var new_class = target.children('[class^=xi-angle-]').attr('class').replace('up', 'down');
+					}
+					
+					target.children('[class^=xi-angle-]').attr('class', new_class);
+					target.parent().children('.txt').slideToggle();
+				}
+				
+				if(target.hasClass('xi-angle-down') || target.hasClass('xi-angle-up')){
+					if(target.hasClass('xi-angle-down')){
+						var new_class = target.attr('class').replace('down', 'up');
+					}else{
+						var new_class = target.attr('class').replace('up', 'down');
+					}
+					
+					target.attr('class', new_class);
+					target.closest('[class^=col_]').children('.txt').slideToggle();
+				}
+				
+				lawyer_slide_swiper.autoplay.stop();
+			}
+		});
+		
+		
+		function mobile_lawyer_slide_setting(){
 			setTimeout(function(){
 				var active_img_width = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area .img_box.swiper-slide-active img').outerWidth(),
 					active_img_height = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area .img_box.swiper-slide-active img').outerHeight(),
@@ -1024,206 +1121,113 @@ $count_number3 = 10.7;
 			}, 500);
 		}
 		
-		// pc ver 변호사 소개 이미지 영역의 현재 활성화되고있는 index 값을 담기 위한 변수.
-		var x = 0;
+		
+		// 자동으로 'lawyer_hover'를 작동시키기 위한 함수
+		start_progress = function() {
+			auto_lawyer_hover = setInterval(function() {
+				/* 자동으로 loop되지 않도록 하기 위해 주석 처리 해둠 - 22.12.21
+				if(jQuery(window).outerWidth() > 1024){// 1024보다 크다면..
+					if(x == jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.pc img').length) x = 0;
+					
+					jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.pc img').eq(x).click();
+					x++;
+				}*/
+			}, 2000);
+		};
 
-    document.addEventListener('DOMContentLoaded', () => {		
-      var certificate_swiper = new Swiper('#certificate.swiper-container',  {
-        slidesPerView: 8,
-        spaceBetween: 10,
-        centeredSlides: true,
-        speed: 21000,
-        observer: true,
-        observeParents: true,
-        preloadImages: true,
-        loop: false,
-        autoplay: {
-          delay: 0,
-        },
-      });
-      
-      
-      // mobile용
-      var lawyer_slide_swiper = new Swiper('#lawyer_slide.swiper-container',  {
-        slidesPerView: 2,
-        spaceBetween: 10,
-        navigation: {
-          nextEl: '#lawyer_slide.swiper-button-next',
-          prevEl: '#lawyer_slide.swiper-button-prev',
-        },
-        centeredSlides: true,
-        observer: true,
-        observeParents: true,
-        preloadImages: true,
-        loop: false,
-        autoplay: false,/*{
-          delay: 1000,
-        },*/
-      }).on('slideChange', function() {
-        var current_slide_index = lawyer_slide_swiper.realIndex,
-          lawyer = '';
+		stop_progress = function() {
+			clearInterval(auto_lawyer_hover);
+		};
+		
+		
+		
+		jQuery(window).on('load', function(){
+			// 자동으로 작동되는 함수를 정지 시켜주기 위한 함수.
+			jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.pc img, #lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro] .keycases').on('mouseover', function(){
+				stop_progress();
+			});
+			jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.pc img, #lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro] .keycases').on('mouseleave', function(){
+				// 현재 선택되었던 index의 다음 요소부터 다시 작동시키기 위해 x값 재정의
+				x = jQuery(event.target).index() + 1;
+				
+				start_progress();
+			});
+			
+			
+			if(jQuery(window).outerWidth() < 1025){// 1025보다 작다면..
+				//mobile_lawyer_slide_setting();
+				start_progress();
+				stop_progress();
+			}else{
+				jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
+				
+				lawyer_hover('<?php echo $lawyer_arr[0]?>');
+				start_progress();
+			}
+		});
+		
+		jQuery(window).on('resize', function(){
+			if(jQuery(window).outerWidth() < 1025){// 1025보다 작다면..
+				stop_progress();
+				
+				jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', '');
+				
+				var lawyer_slide_swiper = new Swiper('#lawyer_slide.swiper-container',  {
+					slidesPerView: 2,
+					spaceBetween: 10,
+					navigation: {
+						nextEl: '#lawyer_slide.swiper-button-next',
+						prevEl: '#lawyer_slide.swiper-button-prev',
+					},
+					centeredSlides: true,
+					observer: true,
+					observeParents: true,
+					preloadImages: true,
+					loop: false,
+					autoplay: false,/*{
+						delay: 5000,
+					},*/
+				}).on('slideChange', function() {
+					var current_slide_index = lawyer_slide_swiper.realIndex,
+						lawyer = '';
 
-        switch(current_slide_index){
-          <?php for($i=0; $i<count($lawyer_arr); $i++){?>
-            case <?php echo $i?> : lawyer = '<?php echo $lawyer_arr[$i]?>'; break;
-          <?php }?>
-        }
+					switch(current_slide_index){
+						<?php for($i=0; $i<count($lawyer_arr); $i++){?>
+							case <?php echo $i?> : lawyer = '<?php echo $lawyer_arr[$i]?>'; break;
+						<?php }?>
+					}
 
-        var target = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img[src*='+lawyer+']'),
-          hover_src = target.attr('src').replace('blur', 'hover');
+					var target = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img[src*='+lawyer+']'),
+						hover_src = target.attr('src').replace('blur', 'hover');
 
-      
-        for(var i=0; i<jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').length; i++){
-          var blur_src = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src').replace('hover', 'blur');
-          jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src', blur_src);
-        }
+				
+					for(var i=0; i<jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').length; i++){
+						var blur_src = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src').replace('hover', 'blur');
+						jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src', blur_src);
+					}
 
-        target.attr('src', hover_src).css('width', '');
-
-
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').removeClass('on');
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).addClass(' on');
-        //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
-        //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).fadeIn();
-        
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').removeClass('on');
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').eq(current_slide_index).addClass(' on');
-      });
-      
-      
-      jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro] .career [class^=col_]').on('click', function(){
-        if(jQuery(window).outerWidth() < 1025){
-          var target = jQuery(event.target);
-
-          if(target.hasClass('title')){
-            if(target.children('[class^=xi-angle-]').hasClass('xi-angle-down')){
-              var new_class = target.children('[class^=xi-angle-]').attr('class').replace('down', 'up');
-            }else{
-              var new_class = target.children('[class^=xi-angle-]').attr('class').replace('up', 'down');
-            }
-            
-            target.children('[class^=xi-angle-]').attr('class', new_class);
-            target.parent().children('.txt').slideToggle();
-          }
-          
-          if(target.hasClass('xi-angle-down') || target.hasClass('xi-angle-up')){
-            if(target.hasClass('xi-angle-down')){
-              var new_class = target.attr('class').replace('down', 'up');
-            }else{
-              var new_class = target.attr('class').replace('up', 'down');
-            }
-            
-            target.attr('class', new_class);
-            target.closest('[class^=col_]').children('.txt').slideToggle();
-          }
-          
-          lawyer_slide_swiper.autoplay.stop();
-        }
-      });
-      
-      // 자동으로 'lawyer_hover'를 작동시키기 위한 함수
-      start_progress = function() {
-        auto_lawyer_hover = setInterval(function() {
-          /* 자동으로 loop되지 않도록 하기 위해 주석 처리 해둠 - 22.12.21
-          if(jQuery(window).outerWidth() > 1024){// 1024보다 크다면..
-            if(x == jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.pc img').length) x = 0;
-            
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.pc img').eq(x).click();
-            x++;
-          }*/
-        }, 2000);
-      };
-
-      stop_progress = function() {
-        clearInterval(auto_lawyer_hover);
-      };
-
-      // 자동으로 작동되는 함수를 정지 시켜주기 위한 함수.
-      jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.pc img, #lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro] .keycases').on('mouseover', function(){
-        stop_progress();
-      });
-      jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.pc img, #lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro] .keycases').on('mouseleave', function(){
-        // 현재 선택되었던 index의 다음 요소부터 다시 작동시키기 위해 x값 재정의
-        x = jQuery(event.target).index() + 1;
-        
-        start_progress();
-      });
-        
-        
-      if(jQuery(window).outerWidth() < 1025){// 1025보다 작다면..
-        //mobile_lawyer_slide_setting();
-        start_progress();
-        stop_progress();
-      }else{
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
-        
-        lawyer_hover('<?php echo $lawyer_arr[0]?>');
-        start_progress();
-      }
-      
-      jQuery(window).on('resize', function(){
-        if (jQuery(window).outerWidth() < 1025) { // 1025보다 작다면..
-          stop_progress();
-          
-          jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', '');
-          
-          var lawyer_slide_swiper = new Swiper('#lawyer_slide.swiper-container',  {
-            slidesPerView: 2,
-            spaceBetween: 10,
-            navigation: {
-              nextEl: '#lawyer_slide.swiper-button-next',
-              prevEl: '#lawyer_slide.swiper-button-prev',
-            },
-            centeredSlides: true,
-            observer: true,
-            observeParents: true,
-            preloadImages: true,
-            loop: false,
-            autoplay: false,/*{
-              delay: 5000,
-            },*/
-          }).on('slideChange', function() {
-            var current_slide_index = lawyer_slide_swiper.realIndex,
-              lawyer = '';
-
-            switch(current_slide_index){
-              <?php for($i=0; $i<count($lawyer_arr); $i++){?>
-                case <?php echo $i?> : lawyer = '<?php echo $lawyer_arr[$i]?>'; break;
-              <?php }?>
-            }
-
-            var target = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img[src*='+lawyer+']'),
-              hover_src = target.attr('src').replace('blur', 'hover');
-
-          
-            for(var i=0; i<jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').length; i++){
-              var blur_src = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src').replace('hover', 'blur');
-              jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src', blur_src);
-            }
-
-            target.attr('src', hover_src).css('width', '');
+					target.attr('src', hover_src).css('width', '');
 
 
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').removeClass('on');
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).addClass(' on');
-            //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
-            //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).fadeIn();
-            
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').removeClass('on');
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').eq(current_slide_index).addClass(' on');
-          });
-          //mobile_lawyer_slide_setting();
-        } else {
-          if( jQuery('body').hasClass('mobile') ){
-            jQuery('body').removeClass('mobile');
-          }
-          jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
-          
-          lawyer_hover('<?php echo $lawyer_arr[0]?>');
-          //start_progress();
-        }
-      });
-    });
+					jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').removeClass('on');
+					jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).addClass(' on');
+					//jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
+					//jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).fadeIn();
+					
+					jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').removeClass('on');
+					jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').eq(current_slide_index).addClass(' on');
+				});
+				//mobile_lawyer_slide_setting();
+			}else{
+				if( jQuery('body').hasClass('mobile') ){
+					jQuery('body').removeClass('mobile');
+				}
+				jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
+				
+				lawyer_hover('<?php echo $lawyer_arr[0]?>');
+				//start_progress();
+			}
+		});
 	</script>
 
 
@@ -1433,7 +1437,79 @@ $count_number3 = 10.7;
 	
 	
 	<script>
-    function checkVisible( elm, eval ) {
+		var main_keycase_swiper = new Swiper('#main_keycase.swiper-container',  {
+			slidesPerView: 1,
+			spaceBetween: 30,
+			//speed: 1000,
+			pagination: {
+					el: '#main_keycase.swiper-pagination',
+					clickable : true,
+				},
+			observer: true,
+			observeParents: true,
+			preloadImages: true,
+			loop: true,
+			autoplay: {
+				delay: 2000,
+			},
+			breakpoints : { // 반응형 설정이 가능 width값으로 조정
+				600 : {
+					slidesPerView : 2,
+					autoplay: {
+						delay: 4000,
+					},
+				},
+			},
+		});
+		
+		var latest_success_swiper = new Swiper('#latest_success.swiper-container',  {
+			slidesPerView: 1,
+			spaceBetween: 0,
+			//speed: 1000,
+			pagination: {
+					el: '#latest_success.swiper-pagination',
+					clickable : true,
+				},
+			pause_on_hover:"yes",
+			observer: true,
+			observeParents: true,
+			preloadImages: true,
+			loop: true,
+			autoplay: {
+				delay: 2000,
+				//pauseOnMouseEnter: true,
+			},
+			breakpoints : { // 반응형 설정이 가능 width값으로 조정
+				1024 : {
+					spaceBetween: 30,
+				},
+			},
+		});
+		
+	
+		var count_number1 = $('.count_number.one')[0] ? $('.count_number.one')[0].innerHTML : '';
+		
+		var isVisible = false;
+
+		$(window).on('scroll', function() {
+			if (checkVisible($('#section3 .title')) && !isVisible) {
+				$({ val : 0 }).animate({ val : count_number1 }, {
+					duration: 2500,
+					step: function() {
+						var num = comma(Math.floor(this.val));
+						$(".count_number.one").text(num);
+					},
+					complete: function() {
+						var num = comma(Math.floor(this.val));
+						$(".count_number.one").text(num);
+					}
+				});
+
+				isVisible=true;
+			}
+		});
+		
+		function checkVisible( elm, eval ) {
 			eval = eval || "object visible";
 			var viewportHeight = $(window).height(), // Viewport Height
 				scrolltop = $(window).scrollTop(), // Scroll Top
@@ -1448,79 +1524,6 @@ $count_number3 = 10.7;
 		function comma(price) {
 			return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		}
-
-    document.addEventListener('DOMContentLoaded', () => {
-      var main_keycase_swiper = new Swiper('#main_keycase.swiper-container',  {
-        slidesPerView: 1,
-        spaceBetween: 30,
-        //speed: 1000,
-        pagination: {
-            el: '#main_keycase.swiper-pagination',
-            clickable : true,
-          },
-        observer: true,
-        observeParents: true,
-        preloadImages: true,
-        loop: true,
-        autoplay: {
-          delay: 2000,
-        },
-        breakpoints : { // 반응형 설정이 가능 width값으로 조정
-          600 : {
-            slidesPerView : 2,
-            autoplay: {
-              delay: 4000,
-            },
-          },
-        },
-      });
-      
-      var latest_success_swiper = new Swiper('#latest_success.swiper-container',  {
-        slidesPerView: 1,
-        spaceBetween: 0,
-        //speed: 1000,
-        pagination: {
-            el: '#latest_success.swiper-pagination',
-            clickable : true,
-          },
-        pause_on_hover:"yes",
-        observer: true,
-        observeParents: true,
-        preloadImages: true,
-        loop: true,
-        autoplay: {
-          delay: 2000,
-          //pauseOnMouseEnter: true,
-        },
-        breakpoints : { // 반응형 설정이 가능 width값으로 조정
-          1024 : {
-            spaceBetween: 30,
-          },
-        },
-      });
-      
-      var count_number1 = $('.count_number.one')[0] ? $('.count_number.one')[0].innerHTML : '';
-      
-      var isVisible = false;
-
-      $(window).on('scroll', function() {
-        if (checkVisible($('#section3 .title')) && !isVisible) {
-          $({ val : 0 }).animate({ val : count_number1 }, {
-            duration: 2500,
-            step: function() {
-              var num = comma(Math.floor(this.val));
-              $(".count_number.one").text(num);
-            },
-            complete: function() {
-              var num = comma(Math.floor(this.val));
-              $(".count_number.one").text(num);
-            }
-          });
-
-          isVisible=true;
-        }
-      });
-    });
 	</script>
 	
 	<!-- 전문로펌 -->
@@ -1830,6 +1833,23 @@ $count_number3 = 10.7;
 			jQuery('.drunk_answer_background').fadeOut();
 			jQuery('.drunk_answer_background .swiper-pagination .swiper-pagination-bullet')[0].click();
 		}
+		
+		var drunk_answer_img_Swiper = new Swiper('#drunk_answer_img.swiper-container',  {
+			slidesPerView: 1,
+			spaceBetween: 5,
+			pagination: {
+				el: '#drunk_answer_img.swiper-pagination',
+					  clickable : true,
+			},
+			navigation: {
+				nextEl: '#drunk_answer_img.swiper-button-next',
+				prevEl: '#drunk_answer_img.swiper-button-prev',
+			},
+			observer: true,
+			observeParents: true,
+			preloadImages: true,
+		});
+
 
 		// 교통사고 모달
 		function accident_answer_img_open(img_file_name){
@@ -1857,40 +1877,22 @@ $count_number3 = 10.7;
 			jQuery('.accident_answer_background').fadeOut();
 			jQuery('.accident_answer_background .swiper-pagination .swiper-pagination-bullet')[0].click();
 		}
-
-    document.addEventListener('DOMContentLoaded', () => {
-      var drunk_answer_img_Swiper = new Swiper('#drunk_answer_img.swiper-container',  {
-        slidesPerView: 1,
-        spaceBetween: 5,
-        pagination: {
-          el: '#drunk_answer_img.swiper-pagination',
-              clickable : true,
-        },
-        navigation: {
-          nextEl: '#drunk_answer_img.swiper-button-next',
-          prevEl: '#drunk_answer_img.swiper-button-prev',
-        },
-        observer: true,
-        observeParents: true,
-        preloadImages: true,
-      });
-      
-      var accident_answer_img_Swiper = new Swiper('#accident_answer_img.swiper-container',  {
-        slidesPerView: 1,
-        spaceBetween: 5,
-        pagination: {
-          el: '#accident_answer_img.swiper-pagination',
-              clickable : true,
-        },
-        navigation: {
-          nextEl: '#accident_answer_img.swiper-button-next',
-          prevEl: '#accident_answer_img.swiper-button-prev',
-        },
-        observer: true,
-        observeParents: true,
-        preloadImages: true,
-      });
-    });
+		
+		var accident_answer_img_Swiper = new Swiper('#accident_answer_img.swiper-container',  {
+			slidesPerView: 1,
+			spaceBetween: 5,
+			pagination: {
+				el: '#accident_answer_img.swiper-pagination',
+					  clickable : true,
+			},
+			navigation: {
+				nextEl: '#accident_answer_img.swiper-button-next',
+				prevEl: '#accident_answer_img.swiper-button-prev',
+			},
+			observer: true,
+			observeParents: true,
+			preloadImages: true,
+		});
 	</script>
 	
 	
@@ -2076,7 +2078,37 @@ $count_number3 = 10.7;
 	</section>
 	
 	<script>
-    // 모달창
+		var latest_thanks_swiper = new Swiper('#latest_thanks.swiper-container',  {
+			slidesPerView: 1.7,
+			spaceBetween: 20,
+			centeredSlides: true,
+			/*
+			pagination: {
+					el: '#latest_thanks.swiper-pagination',
+					clickable : true,
+				},
+			*/
+			navigation: {
+				nextEl: '#latest_thanks.swiper-button-next',
+				prevEl: '#latest_thanks.swiper-button-prev',
+			},
+			observer: true,
+			observeParents: true,
+			preloadImages: true,
+			loop: true,
+			autoplay: {
+				delay: 2000,
+			},
+			breakpoints : { // 반응형 설정이 가능 width값으로 조정
+				600 : {
+					slidesPerView : 3,
+					spaceBetween: 40,
+				},
+			},
+		});
+		
+		
+		// 모달창
 		function latest_modal(action, id){
 			if(action == 'open'){
 				jQuery('.latest_modal_bg_'+id).fadeIn();
@@ -2086,47 +2118,15 @@ $count_number3 = 10.7;
 				jQuery('section .container').css('z-index', '');
 			}
 		}
-
-    document.addEventListener('DOMContentLoaded', () => {
-      var latest_thanks_swiper = new Swiper('#latest_thanks.swiper-container',  {
-        slidesPerView: 1.7,
-        spaceBetween: 20,
-        centeredSlides: true,
-        /*
-        pagination: {
-            el: '#latest_thanks.swiper-pagination',
-            clickable : true,
-          },
-        */
-        navigation: {
-          nextEl: '#latest_thanks.swiper-button-next',
-          prevEl: '#latest_thanks.swiper-button-prev',
-        },
-        observer: true,
-        observeParents: true,
-        preloadImages: true,
-        loop: true,
-        autoplay: {
-          delay: 2000,
-        },
-        breakpoints : { // 반응형 설정이 가능 width값으로 조정
-          600 : {
-            slidesPerView : 3,
-            spaceBetween: 40,
-          },
-        },
-      });
-      
-      jQuery('body').on('click', function(e){
-        const _class = jQuery(event.target).attr('class');
-        if( _class && _class != '' ){
-          if( _class.indexOf('latest_modal_bg_') > -1 ){
-            jQuery('[class^=latest_modal_bg_]').fadeOut();
-            jQuery('section .container').css('z-index', '');
-          }
-        }
-      });
-    });
+		
+		jQuery('body').on('click', function(e){
+			if( jQuery(event.target).attr('class') != '' ){
+				if( jQuery(event.target).attr('class').indexOf('latest_modal_bg_') > -1 ){
+					jQuery('[class^=latest_modal_bg_]').fadeOut();
+					jQuery('section .container').css('z-index', '');
+				}
+			}
+		});
 	</script>
 	
 	
@@ -2436,9 +2436,10 @@ $count_number3 = 10.7;
 
 				infowindow.open(map, marker);
 			}
-      document.addEventListener('DOMContentLoaded', () => {
-        map_make('seoul');
-      });
+			
+			jQuery(window).on('load', function(){
+				map_make('seoul');
+			});
 		</script>
     </section>
 </main>

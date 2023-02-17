@@ -1044,50 +1044,51 @@ $count_number3 = 10.7;
       
       
       // mobile용
-      var lawyer_slide_swiper = new Swiper('#lawyer_slide.swiper-container',  {
-        slidesPerView: 2,
-        spaceBetween: 10,
-        navigation: {
-          nextEl: '#lawyer_slide.swiper-button-next',
-          prevEl: '#lawyer_slide.swiper-button-prev',
-        },
-        centeredSlides: true,
-        observer: true,
-        observeParents: true,
-        preloadImages: true,
-        loop: false,
-        autoplay: false,/*{
-          delay: 1000,
-        },*/
-      }).on('slideChange', function() {
-        var current_slide_index = lawyer_slide_swiper.realIndex,
-          lawyer = '';
+      requestAnimationFrame(() => {
+        var lawyer_slide_swiper = new Swiper('#lawyer_slide.swiper-container',  {
+          slidesPerView: 2,
+          spaceBetween: 10,
+          navigation: {
+            nextEl: '#lawyer_slide.swiper-button-next',
+            prevEl: '#lawyer_slide.swiper-button-prev',
+          },
+          centeredSlides: true,
+          observer: true,
+          observeParents: true,
+          preloadImages: true,
+          loop: false,
+          autoplay: false,/*{
+            delay: 1000,
+          },*/
+        }).on('slideChange', function() {
+          var current_slide_index = lawyer_slide_swiper.realIndex,
+            lawyer = '';
 
-        switch(current_slide_index){
-          <?php for($i=0; $i<count($lawyer_arr); $i++){?>
-            case <?php echo $i?> : lawyer = '<?php echo $lawyer_arr[$i]?>'; break;
-          <?php }?>
-        }
+          switch(current_slide_index){
+            <?php for($i=0; $i<count($lawyer_arr); $i++){?>
+              case <?php echo $i?> : lawyer = '<?php echo $lawyer_arr[$i]?>'; break;
+            <?php }?>
+          }
 
-        var target = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img[src*='+lawyer+']'),
-          hover_src = target.attr('src').replace('blur', 'hover');
+          var target = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img[src*='+lawyer+']'),
+            hover_src = target.attr('src').replace('blur', 'hover');
 
-      
-        for(var i=0; i<jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').length; i++){
-          var blur_src = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src').replace('hover', 'blur');
-          jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src', blur_src);
-        }
-
-        target.attr('src', hover_src).css('width', '');
-
-
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').removeClass('on');
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).addClass(' on');
-        //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
-        //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).fadeIn();
         
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').removeClass('on');
-        jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').eq(current_slide_index).addClass(' on');
+          for(var i=0; i<jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').length; i++){
+            var blur_src = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src').replace('hover', 'blur');
+            jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src', blur_src);
+          }
+
+          target.attr('src', hover_src).css('width', '');
+
+          jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').removeClass('on');
+          jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).addClass('on');
+          //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
+          //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).fadeIn();
+          
+          jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').removeClass('on');
+          jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').eq(current_slide_index).addClass('on');
+        });
       });
       
       
@@ -1148,81 +1149,17 @@ $count_number3 = 10.7;
         
         start_progress();
       });
-        
-        
+      
       if(jQuery(window).outerWidth() < 1025){// 1025보다 작다면..
         //mobile_lawyer_slide_setting();
-        start_progress();
-        stop_progress();
+        // start_progress();
+        // stop_progress();
       }else{
         jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
         
         lawyer_hover('<?php echo $lawyer_arr[0]?>');
-        start_progress();
+        // start_progress();
       }
-      
-      jQuery(window).on('resize', function(){
-        if (jQuery(window).outerWidth() < 1025) { // 1025보다 작다면..
-          stop_progress();
-          
-          jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', '');
-          
-          var lawyer_slide_swiper = new Swiper('#lawyer_slide.swiper-container',  {
-            slidesPerView: 2,
-            spaceBetween: 10,
-            navigation: {
-              nextEl: '#lawyer_slide.swiper-button-next',
-              prevEl: '#lawyer_slide.swiper-button-prev',
-            },
-            centeredSlides: true,
-            observer: true,
-            observeParents: true,
-            preloadImages: true,
-            loop: false,
-            autoplay: false,/*{
-              delay: 5000,
-            },*/
-          }).on('slideChange', function() {
-            var current_slide_index = lawyer_slide_swiper.realIndex,
-              lawyer = '';
-
-            switch(current_slide_index){
-              <?php for($i=0; $i<count($lawyer_arr); $i++){?>
-                case <?php echo $i?> : lawyer = '<?php echo $lawyer_arr[$i]?>'; break;
-              <?php }?>
-            }
-
-            var target = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img[src*='+lawyer+']'),
-              hover_src = target.attr('src').replace('blur', 'hover');
-
-          
-            for(var i=0; i<jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').length; i++){
-              var blur_src = jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src').replace('hover', 'blur');
-              jQuery('#lawyer_slide_section .lawyer .lawyer_area .img_area.mobile img').eq(i).attr('src', blur_src);
-            }
-
-            target.attr('src', hover_src).css('width', '');
-
-
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').removeClass('on');
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).addClass(' on');
-            //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
-            //jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').eq(current_slide_index).fadeIn();
-            
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').removeClass('on');
-            jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_slogan]').eq(current_slide_index).addClass(' on');
-          });
-          //mobile_lawyer_slide_setting();
-        } else {
-          if( jQuery('body').hasClass('mobile') ){
-            jQuery('body').removeClass('mobile');
-          }
-          jQuery('#lawyer_slide_section .lawyer .lawyer_area .intro_area [class*=_intro]').css('display', 'none');
-          
-          lawyer_hover('<?php echo $lawyer_arr[0]?>');
-          //start_progress();
-        }
-      });
     });
 	</script>
 
